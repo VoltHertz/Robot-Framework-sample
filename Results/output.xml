@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 7.0.1 (Python 3.12.5 on darwin)" generated="2024-09-05T14:53:16.307188" rpa="false" schemaversion="5">
+<suite id="s1" name="TC01" source="/Users/raiannalima/Documents/Programming/Courses/Robot-Framework-02-Aula-07/Robot-Framework-02-Estruturando/Tests/Voo/TC01.robot">
+<test id="s1-t1" name="TC01 - Reservando passagem de destinos dentro dos EUA na classe econômica" line="6">
+<kw name="Dado que eu acesse o php travels" owner="Login_Steps">
+<kw name="Open Browser" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:16.626813" level="INFO">Opening browser 'chrome' to base url 'https://www.phptravels.net/'.</msg>
+<arg>${URL}</arg>
+<arg>${Browser}</arg>
+<doc>Opens a new browser instance to the optional ``url``.</doc>
+<status status="PASS" start="2024-09-05T14:53:16.626464" elapsed="5.283177"/>
+</kw>
+<kw name="Maximize Browser Window" owner="SeleniumLibrary">
+<doc>Maximizes current browser window.</doc>
+<status status="PASS" start="2024-09-05T14:53:21.910635" elapsed="0.378272"/>
+</kw>
+<status status="PASS" start="2024-09-05T14:53:16.625464" elapsed="5.663743"/>
+</kw>
+<kw name="E realize o cadastro" owner="Login_Steps">
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Home.A_Signup}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:22.290589" elapsed="0.052341"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:22.345709" level="INFO">Clicking element '//strong[contains(text(), "Account")]'.</msg>
+<arg>${Home.A_Signup}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:22.343363" elapsed="0.104929"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Home.A_Register}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:22.448534" elapsed="0.041387"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:22.491202" level="INFO">Clicking element '//strong[contains(text(), "Signup")]'.</msg>
+<arg>${Home.A_Register}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:22.490159" elapsed="1.330245"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Input_PrimeiroNome}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:23.820786" elapsed="0.631885"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:24.453996" level="INFO">Typing text 'Edward' into text field '//input[@id="firstname"]'.</msg>
+<arg>${Login.Input_PrimeiroNome}</arg>
+<arg>${PrimeiroNome}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:24.453141" elapsed="2.246467"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Input_UltimoNome}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:26.699837" elapsed="0.030997"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:26.731920" level="INFO">Typing text 'Sheeran' into text field '//input[@id="last_name"]'.</msg>
+<arg>${Login.Input_UltimoNome}</arg>
+<arg>${UltimoNome}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:26.731168" elapsed="0.176756"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Input_Pais}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:26.908292" elapsed="0.272333"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:27.183097" level="INFO">Clicking element '//button[@title="Select Country"]'.</msg>
+<arg>${Login.Input_Pais}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:27.181852" elapsed="0.344474"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Input_Option_Pais}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:27.526862" elapsed="0.277140"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:27.805101" level="INFO">Typing text 'Brazil' into text field '//input[@aria-activedescendant="bs-select-1-0"]'.</msg>
+<arg>${Login.Input_Option_Pais}</arg>
+<arg>Brazil</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:27.804290" elapsed="0.153252"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Option_Brasil}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:27.957934" elapsed="0.043600"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:28.003203" level="INFO">Clicking element '//span[contains(text(), "Brazil")]'.</msg>
+<arg>${Login.Option_Brasil}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.002423" elapsed="0.081815"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Input_Telefone}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.084574" elapsed="0.031548"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:28.116992" level="INFO">Typing text '555-431' into text field '//input[@id="phone"]'.</msg>
+<arg>${Login.Input_Telefone}</arg>
+<arg>${Telefone}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.116338" elapsed="0.159358"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Input_Email}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.276181" elapsed="0.037846"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:28.314891" level="INFO">Typing text 'teste@gmail.com' into text field '//input[@id="user_email"]'.</msg>
+<arg>${Login.Input_Email}</arg>
+<arg>${Email}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.314249" elapsed="0.166770"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Input_Senha}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.481330" elapsed="0.028790"/>
+</kw>
+<kw name="Input Text" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:28.511183" level="INFO">Typing text '123456' into text field '//input[@id="password"]'.</msg>
+<arg>${Login.Input_Senha}</arg>
+<arg>${Senha}</arg>
+<doc>Types the given ``text`` into the text field identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.510369" elapsed="0.161229"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Iframe_reCAPTCHA}</arg>
+<arg>30</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.671842" elapsed="0.034713"/>
+</kw>
+<kw name="Select Frame" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:28.708370" level="INFO">Selecting frame '//iframe[@title="reCAPTCHA"]'.</msg>
+<arg>${Login.Iframe_reCAPTCHA}</arg>
+<doc>Sets frame identified by ``locator`` as the current frame.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.707114" elapsed="0.050142"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Not_Robot}</arg>
+<arg>30</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.757479" elapsed="0.034425"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:28.792876" level="INFO">Clicking element '//div[@class="recaptcha-checkbox-border"]'.</msg>
+<arg>${Login.Not_Robot}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="PASS" start="2024-09-05T14:53:28.792241" elapsed="0.265971"/>
+</kw>
+<kw name="Unselect Frame" owner="SeleniumLibrary">
+<doc>Sets the main frame as the current frame.</doc>
+<status status="PASS" start="2024-09-05T14:53:29.058568" elapsed="0.025682"/>
+</kw>
+<kw name="Wait Until Element Is Visible" owner="SeleniumLibrary">
+<arg>${Login.Button_Signup}</arg>
+<arg>10</arg>
+<doc>Waits until the element ``locator`` is visible.</doc>
+<status status="PASS" start="2024-09-05T14:53:29.084504" elapsed="0.069400"/>
+</kw>
+<kw name="Sleep" owner="BuiltIn">
+<msg time="2024-09-05T14:53:31.155267" level="INFO">Slept 2 seconds.</msg>
+<arg>2s</arg>
+<doc>Pauses the test executed for the given time.</doc>
+<status status="PASS" start="2024-09-05T14:53:29.154351" elapsed="2.001156"/>
+</kw>
+<kw name="Run Keyword And Ignore Error" owner="BuiltIn">
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:31.157844" level="INFO">Clicking element '//div[@class="signup_button"]'.</msg>
+<msg time="2024-09-05T14:53:32.415530" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-11.png"&gt;&lt;img src="selenium-screenshot-11.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-09-05T14:53:32.416303" level="FAIL">ElementClickInterceptedException: Message: element click intercepted: Element &lt;div class="signup_button"&gt;...&lt;/div&gt; is not clickable at point (720, 600). Other element would receive the click: &lt;iframe title="o desafio reCAPTCHA expira em dois minutos" name="c-dg72ct4z559r" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" src="https://www.google.com/recaptcha/api2/bframe?hl=pt-BR&amp;amp;v=EGbODne6buzpTnWrrBprcfAY&amp;amp;k=6LdX3JoUAAAAAFCG5tm0MFJaCF3LKxUN4pVusJIF" style="width: 400px; height: 580px;"&gt;&lt;/iframe&gt;
+  (Session info: chrome=128.0.6613.120)
+Stacktrace:
+0   chromedriver                        0x000000010470c248 chromedriver + 5096008
+1   chromedriver                        0x0000000104703a7a chromedriver + 5061242
+2   chromedriver                        0x000000010428efd0 chromedriver + 389072
+3   chromedriver                        0x00000001042e2486 chromedriver + 730246
+4   chromedriver                        0x00000001042e038d chromedriver + 721805
+5   chromedriver                        0x00000001042dde47 chromedriver + 712263
+6   chromedriver                        0x00000001042dccf2 chromedriver + 707826
+7   chromedriver                        0x00000001042d08c6 chromedriver + 657606
+8   chromedriver                        0x00000001042ffef2 chromedriver + 851698
+9   chromedriver                        0x00000001042d0288 chromedriver + 656008
+10  chromedriver                        0x00000001043000ae chromedriver + 852142
+11  chromedriver                        0x000000010431d250 chromedriver + 971344
+12  chromedriver                        0x00000001042ffc93 chromedriver + 851091
+13  chromedriver                        0x00000001042cec79 chromedriver + 650361
+14  chromedriver                        0x00000001042cf49e chromedriver + 652446
+15  chromedriver                        0x00000001046cefc0 chromedriver + 4845504
+16  chromedriver                        0x00000001046d3ed8 chromedriver + 4865752
+17  chromedriver                        0x00000001046d45a5 chromedriver + 4867493
+18  chromedriver                        0x00000001046b1bf9 chromedriver + 4725753
+19  chromedriver                        0x00000001046d4899 chromedriver + 4868249
+20  chromedriver                        0x00000001046a3b14 chromedriver + 4668180
+21  chromedriver                        0x00000001046f3d78 chromedriver + 4996472
+22  chromedriver                        0x00000001046f3f77 chromedriver + 4996983
+23  chromedriver                        0x000000010470367e chromedriver + 5060222
+24  libsystem_pthread.dylib             0x00007ff8028b84e1 _pthread_start + 125
+25  libsystem_pthread.dylib             0x00007ff8028b3f6b thread_start + 15
+</msg>
+<arg>${Login.Button_Signup}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="FAIL" start="2024-09-05T14:53:31.156617" elapsed="1.271167">ElementClickInterceptedException: Message: element click intercepted: Element &lt;div class="signup_button"&gt;...&lt;/div&gt; is not clickable at point (720, 600). Other element would receive the click: &lt;iframe title="o desafio reCAPTCHA expira em dois minutos" name="c-dg72ct4z559r" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" src="https://www.google.com/recaptcha/api2/bframe?hl=pt-BR&amp;amp;v=EGbODne6buzpTnWrrBprcfAY&amp;amp;k=6LdX3JoUAAAAAFCG5tm0MFJaCF3LKxUN4pVusJIF" style="width: 400px; height: 580px;"&gt;&lt;/iframe&gt;
+  (Session info: chrome=128.0.6613.120)
+Stacktrace:
+0   chromedriver                        0x000000010470c248 chromedriver + 5096008
+1   chromedriver                        0x0000000104703a7a chromedriver + 5061242
+2   chromedriver                        0x000000010428efd0 chromedriver + 389072
+3   chromedriver                        0x00000001042e2486 chromedriver + 730246
+4   chromedriver                        0x00000001042e038d chromedriver + 7...
+    [ Message content over the limit has been removed. ]
+...romedriver                        0x00000001046cefc0 chromedriver + 4845504
+16  chromedriver                        0x00000001046d3ed8 chromedriver + 4865752
+17  chromedriver                        0x00000001046d45a5 chromedriver + 4867493
+18  chromedriver                        0x00000001046b1bf9 chromedriver + 4725753
+19  chromedriver                        0x00000001046d4899 chromedriver + 4868249
+20  chromedriver                        0x00000001046a3b14 chromedriver + 4668180
+21  chromedriver                        0x00000001046f3d78 chromedriver + 4996472
+22  chromedriver                        0x00000001046f3f77 chromedriver + 4996983
+23  chromedriver                        0x000000010470367e chromedriver + 5060222
+24  libsystem_pthread.dylib             0x00007ff8028b84e1 _pthread_start + 125
+25  libsystem_pthread.dylib             0x00007ff8028b3f6b thread_start + 15</status>
+</kw>
+<arg>Click Element</arg>
+<arg>${Login.Button_Signup}</arg>
+<doc>Runs the given keyword with the given arguments and ignores possible error.</doc>
+<status status="PASS" start="2024-09-05T14:53:31.156033" elapsed="1.271930"/>
+</kw>
+<kw name="Click Element" owner="SeleniumLibrary">
+<msg time="2024-09-05T14:53:32.428902" level="INFO">Clicking element '//div[@class="signup_button"]'.</msg>
+<msg time="2024-09-05T14:53:33.661350" level="INFO" html="true">&lt;/td&gt;&lt;/tr&gt;&lt;tr&gt;&lt;td colspan="3"&gt;&lt;a href="selenium-screenshot-12.png"&gt;&lt;img src="selenium-screenshot-12.png" width="800px"&gt;&lt;/a&gt;</msg>
+<msg time="2024-09-05T14:53:33.661670" level="FAIL">ElementClickInterceptedException: Message: element click intercepted: Element &lt;div class="signup_button"&gt;...&lt;/div&gt; is not clickable at point (720, 600). Other element would receive the click: &lt;iframe title="o desafio reCAPTCHA expira em dois minutos" name="c-dg72ct4z559r" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" src="https://www.google.com/recaptcha/api2/bframe?hl=pt-BR&amp;amp;v=EGbODne6buzpTnWrrBprcfAY&amp;amp;k=6LdX3JoUAAAAAFCG5tm0MFJaCF3LKxUN4pVusJIF" style="width: 400px; height: 580px;"&gt;&lt;/iframe&gt;
+  (Session info: chrome=128.0.6613.120)
+Stacktrace:
+0   chromedriver                        0x000000010470c248 chromedriver + 5096008
+1   chromedriver                        0x0000000104703a7a chromedriver + 5061242
+2   chromedriver                        0x000000010428efd0 chromedriver + 389072
+3   chromedriver                        0x00000001042e2486 chromedriver + 730246
+4   chromedriver                        0x00000001042e038d chromedriver + 721805
+5   chromedriver                        0x00000001042dde47 chromedriver + 712263
+6   chromedriver                        0x00000001042dccf2 chromedriver + 707826
+7   chromedriver                        0x00000001042d08c6 chromedriver + 657606
+8   chromedriver                        0x00000001042ffef2 chromedriver + 851698
+9   chromedriver                        0x00000001042d0288 chromedriver + 656008
+10  chromedriver                        0x00000001043000ae chromedriver + 852142
+11  chromedriver                        0x000000010431d250 chromedriver + 971344
+12  chromedriver                        0x00000001042ffc93 chromedriver + 851091
+13  chromedriver                        0x00000001042cec79 chromedriver + 650361
+14  chromedriver                        0x00000001042cf49e chromedriver + 652446
+15  chromedriver                        0x00000001046cefc0 chromedriver + 4845504
+16  chromedriver                        0x00000001046d3ed8 chromedriver + 4865752
+17  chromedriver                        0x00000001046d45a5 chromedriver + 4867493
+18  chromedriver                        0x00000001046b1bf9 chromedriver + 4725753
+19  chromedriver                        0x00000001046d4899 chromedriver + 4868249
+20  chromedriver                        0x00000001046a3b14 chromedriver + 4668180
+21  chromedriver                        0x00000001046f3d78 chromedriver + 4996472
+22  chromedriver                        0x00000001046f3f77 chromedriver + 4996983
+23  chromedriver                        0x000000010470367e chromedriver + 5060222
+24  libsystem_pthread.dylib             0x00007ff8028b84e1 _pthread_start + 125
+25  libsystem_pthread.dylib             0x00007ff8028b3f6b thread_start + 15
+</msg>
+<arg>${Login.Button_Signup}</arg>
+<doc>Click the element identified by ``locator``.</doc>
+<status status="FAIL" start="2024-09-05T14:53:32.428216" elapsed="1.234320">ElementClickInterceptedException: Message: element click intercepted: Element &lt;div class="signup_button"&gt;...&lt;/div&gt; is not clickable at point (720, 600). Other element would receive the click: &lt;iframe title="o desafio reCAPTCHA expira em dois minutos" name="c-dg72ct4z559r" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" src="https://www.google.com/recaptcha/api2/bframe?hl=pt-BR&amp;amp;v=EGbODne6buzpTnWrrBprcfAY&amp;amp;k=6LdX3JoUAAAAAFCG5tm0MFJaCF3LKxUN4pVusJIF" style="width: 400px; height: 580px;"&gt;&lt;/iframe&gt;
+  (Session info: chrome=128.0.6613.120)
+Stacktrace:
+0   chromedriver                        0x000000010470c248 chromedriver + 5096008
+1   chromedriver                        0x0000000104703a7a chromedriver + 5061242
+2   chromedriver                        0x000000010428efd0 chromedriver + 389072
+3   chromedriver                        0x00000001042e2486 chromedriver + 730246
+4   chromedriver                        0x00000001042e038d chromedriver + 7...
+    [ Message content over the limit has been removed. ]
+...romedriver                        0x00000001046cefc0 chromedriver + 4845504
+16  chromedriver                        0x00000001046d3ed8 chromedriver + 4865752
+17  chromedriver                        0x00000001046d45a5 chromedriver + 4867493
+18  chromedriver                        0x00000001046b1bf9 chromedriver + 4725753
+19  chromedriver                        0x00000001046d4899 chromedriver + 4868249
+20  chromedriver                        0x00000001046a3b14 chromedriver + 4668180
+21  chromedriver                        0x00000001046f3d78 chromedriver + 4996472
+22  chromedriver                        0x00000001046f3f77 chromedriver + 4996983
+23  chromedriver                        0x000000010470367e chromedriver + 5060222
+24  libsystem_pthread.dylib             0x00007ff8028b84e1 _pthread_start + 125
+25  libsystem_pthread.dylib             0x00007ff8028b3f6b thread_start + 15</status>
+</kw>
+<status status="FAIL" start="2024-09-05T14:53:22.290086" elapsed="11.372740">ElementClickInterceptedException: Message: element click intercepted: Element &lt;div class="signup_button"&gt;...&lt;/div&gt; is not clickable at point (720, 600). Other element would receive the click: &lt;iframe title="o desafio reCAPTCHA expira em dois minutos" name="c-dg72ct4z559r" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" src="https://www.google.com/recaptcha/api2/bframe?hl=pt-BR&amp;amp;v=EGbODne6buzpTnWrrBprcfAY&amp;amp;k=6LdX3JoUAAAAAFCG5tm0MFJaCF3LKxUN4pVusJIF" style="width: 400px; height: 580px;"&gt;&lt;/iframe&gt;
+  (Session info: chrome=128.0.6613.120)
+Stacktrace:
+0   chromedriver                        0x000000010470c248 chromedriver + 5096008
+1   chromedriver                        0x0000000104703a7a chromedriver + 5061242
+2   chromedriver                        0x000000010428efd0 chromedriver + 389072
+3   chromedriver                        0x00000001042e2486 chromedriver + 730246
+4   chromedriver                        0x00000001042e038d chromedriver + 7...
+    [ Message content over the limit has been removed. ]
+...romedriver                        0x00000001046cefc0 chromedriver + 4845504
+16  chromedriver                        0x00000001046d3ed8 chromedriver + 4865752
+17  chromedriver                        0x00000001046d45a5 chromedriver + 4867493
+18  chromedriver                        0x00000001046b1bf9 chromedriver + 4725753
+19  chromedriver                        0x00000001046d4899 chromedriver + 4868249
+20  chromedriver                        0x00000001046a3b14 chromedriver + 4668180
+21  chromedriver                        0x00000001046f3d78 chromedriver + 4996472
+22  chromedriver                        0x00000001046f3f77 chromedriver + 4996983
+23  chromedriver                        0x000000010470367e chromedriver + 5060222
+24  libsystem_pthread.dylib             0x00007ff8028b84e1 _pthread_start + 125
+25  libsystem_pthread.dylib             0x00007ff8028b3f6b thread_start + 15</status>
+</kw>
+<kw name="E faça o Login" owner="Login_Steps">
+<status status="NOT RUN" start="2024-09-05T14:53:33.663314" elapsed="0.000058"/>
+</kw>
+<kw name="Quando eu realizo uma busca de um vôo ida e volta">
+<status status="NOT RUN" start="2024-09-05T14:53:33.663774" elapsed="0.000050"/>
+</kw>
+<kw name="E saindo de Los Angeles EUA">
+<status status="NOT RUN" start="2024-09-05T14:53:33.664372" elapsed="0.000048"/>
+</kw>
+<kw name="E fecho o navegador" owner="Login_Steps">
+<status status="NOT RUN" start="2024-09-05T14:53:33.664709" elapsed="0.000056"/>
+</kw>
+<status status="FAIL" start="2024-09-05T14:53:16.624510" elapsed="17.040622">ElementClickInterceptedException: Message: element click intercepted: Element &lt;div class="signup_button"&gt;...&lt;/div&gt; is not clickable at point (720, 600). Other element would receive the click: &lt;iframe title="o desafio reCAPTCHA expira em dois minutos" name="c-dg72ct4z559r" frameborder="0" scrolling="no" sandbox="allow-forms allow-popups allow-same-origin allow-scripts allow-top-navigation allow-modals allow-popups-to-escape-sandbox allow-storage-access-by-user-activation" src="https://www.google.com/recaptcha/api2/bframe?hl=pt-BR&amp;amp;v=EGbODne6buzpTnWrrBprcfAY&amp;amp;k=6LdX3JoUAAAAAFCG5tm0MFJaCF3LKxUN4pVusJIF" style="width: 400px; height: 580px;"&gt;&lt;/iframe&gt;
+  (Session info: chrome=128.0.6613.120)
+Stacktrace:
+0   chromedriver                        0x000000010470c248 chromedriver + 5096008
+1   chromedriver                        0x0000000104703a7a chromedriver + 5061242
+2   chromedriver                        0x000000010428efd0 chromedriver + 389072
+3   chromedriver                        0x00000001042e2486 chromedriver + 730246
+4   chromedriver                        0x00000001042e038d chromedriver + 7...
+    [ Message content over the limit has been removed. ]
+...romedriver                        0x00000001046cefc0 chromedriver + 4845504
+16  chromedriver                        0x00000001046d3ed8 chromedriver + 4865752
+17  chromedriver                        0x00000001046d45a5 chromedriver + 4867493
+18  chromedriver                        0x00000001046b1bf9 chromedriver + 4725753
+19  chromedriver                        0x00000001046d4899 chromedriver + 4868249
+20  chromedriver                        0x00000001046a3b14 chromedriver + 4668180
+21  chromedriver                        0x00000001046f3d78 chromedriver + 4996472
+22  chromedriver                        0x00000001046f3f77 chromedriver + 4996983
+23  chromedriver                        0x000000010470367e chromedriver + 5060222
+24  libsystem_pthread.dylib             0x00007ff8028b84e1 _pthread_start + 125
+25  libsystem_pthread.dylib             0x00007ff8028b3f6b thread_start + 15</status>
+</test>
+<status status="FAIL" start="2024-09-05T14:53:16.309895" elapsed="17.356576"/>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="TC01">TC01</stat>
+</suite>
+</statistics>
+<errors>
+</errors>
+</robot>
