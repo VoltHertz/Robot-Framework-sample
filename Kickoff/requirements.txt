@@ -1,0 +1,18 @@
+# Robot Framework - Dependências Essenciais (compatível com Python 3.13)
+robotframework>=7.0,<8.0
+robotframework-seleniumlibrary>=6.7.0
+robotframework-requests>=0.9.7
+robotframework-jsonlibrary>=0.5.0
+
+# Utilitários básicos
+robotframework-pabot>=2.17.0          # Execução em paralelo
+
+# Dependências opcionais (instale manualmente se necessário)
+# robotframework-browser>=18.0.0        # Pode precisar de Node.js
+# robotframework-httplibrary>=0.4.0     # Alternativa ao requests
+# robotframework-confluentkafkalibrary>=2.0.0  # Para Kafka
+# robotframework-grpc-library>=0.3.0    # Para gRPC (não disponível para Python 3.13)
+
+# Desenvolvimento
+# robotframework-debuglibrary>=2.3.0    # Debug de testes
+# robotframework-datadriver>=1.11.0     # Testes orientados a dados
