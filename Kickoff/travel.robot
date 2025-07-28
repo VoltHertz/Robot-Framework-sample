@@ -125,13 +125,13 @@ E saindo de ${Texto}
     Press Keys                     ${Input_Ida}  ARROW_DOWN
     Press Keys                     ${Input_Ida}  ENTER 
 
-E indo para ${Texto}
+#E indo para ${Texto}
 
 
-E saindo na data ${Texto}
+#E saindo na data ${Texto}
 
 
-E voltando na data ${Texto}
+#E voltando na data ${Texto}
 
 E acesso a página de visto
     Wait Until Element Is Visible  ${A_Visto}  10
