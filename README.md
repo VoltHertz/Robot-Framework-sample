@@ -23,6 +23,8 @@ Este projeto foi desenvolvido seguindo e expandindo os ensinamentos do tutorial/
 
 📂 **[Repositório Original - Raianna Lima](https://github.com/raiannalimacode/Robot-Framework-02-Estruturando)**
 
+📚 **[SeleniumLibrary Keywords Reference](https://robotframework.org/SeleniumLibrary/SeleniumLibrary.html)**
+
 **Sobre Bianca Campos:**
 - QA Engineer experiente com foco em automação
 - Especialista em Robot Framework e ferramentas de teste
@@ -41,6 +43,16 @@ A documentação dos Design Patterns foi desenvolvida através de pesquisas apro
 - Exemplos práticos e implementações
 - Melhores práticas da indústria
 - Fundamentação teórica sólida
+
+### Referências Técnicas Essenciais
+A **SeleniumLibrary Keywords Reference** é uma documentação oficial completa que contém:
+- **Todas as keywords disponíveis** para automação web com Robot Framework
+- **Sintaxe detalhada** com exemplos de uso para cada keyword
+- **Parâmetros e argumentos** necessários para cada função
+- **Tipos de retorno** e comportamentos esperados
+- **Casos de uso práticos** para interação com elementos web
+
+Esta referência é fundamental para implementar corretamente os Design Patterns apresentados neste projeto, especialmente o Page Object Model (POM) e outros padrões que dependem de interações precisas com elementos de interface.
 
 ## 🏗️ Design Patterns a implementar/Implementados
 
