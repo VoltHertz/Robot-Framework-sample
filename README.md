@@ -58,6 +58,7 @@ Desenvolvimento de casos de uso de teste utilizando a API [DummyJSON](https://du
 
 - **main**: Branch principal com código estável
 - **feature/copilot-claude-sonnet-4.0-development**: Branch dedicado ao desenvolvimento com Copilot Claude Sonnet 4.0 para implementação de casos de uso e Design Patterns
+- **feature/claude-code-cli-development**: Branch para desenvolvimento com Claude Code CLI, focado em automação avançada e integração contínua
 
 ## 📖 Documentação
 
