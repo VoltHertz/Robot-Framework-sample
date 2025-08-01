@@ -63,3 +63,7 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# AI instructions for copilot
+*.instructions.md
+copilot-instructions.md
