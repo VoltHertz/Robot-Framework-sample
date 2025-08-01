@@ -54,6 +54,11 @@ Desenvolvimento de casos de uso de teste utilizando a API [DummyJSON](https://du
 
 ⚠️ **Em Desenvolvimento** - Definição de estrutura de pastas e organização de arquivos em andamento.
 
+### Branches de Desenvolvimento
+
+- **main**: Branch principal com código estável
+- **feature/copilot-claude-sonnet-4.0-development**: Branch dedicado ao desenvolvimento com Copilot Claude Sonnet 4.0 para implementação de casos de uso e Design Patterns
+
 ## 📖 Documentação
 
 A documentação é atualizada continuamente conforme novas implementações e padrões são aplicados. Consulte a pasta `Documentation/` para exemplos e guias detalhados.
