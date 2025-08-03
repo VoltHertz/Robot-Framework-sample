@@ -65,5 +65,8 @@ Thumbs.db
 *.temp
 
 # AI instructions for copilot
-*.instructions.md
-copilot-instructions.md
+#*.instructions.md
+#copilot-instructions.md
+
+#AI instructions for claude
+#CLAUDE.md
