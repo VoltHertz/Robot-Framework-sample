@@ -6,6 +6,16 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a Robot Framework test automation project focused on implementing Design Patterns for large-scale functional testing. The project demonstrates best practices for CI/CD environments with hundreds of functional tests across different platforms.
 
+## Development Guidelines
+
+- Always add explanatory comments for complex or non-trivial code sections
+- Never delete existing comments unless they are irrelevant or incorrect
+- When debugging, add comments indicating debug-only code and remove unnecessary files/comments when finished
+- Include filename and line number in log messages
+- Execute strictly what is requested; ask permission for additional changes
+- Keep `CLAUDE.md` updated with code changes and project updates
+- Sempre coloque o nome do arquivo e o número da linha na mensagem de log.
+
 ## Architecture & Design Patterns
 
 The project implements several key design patterns:
@@ -13,29 +23,59 @@ The project implements several key design patterns:
 - **Library-keyword Patterns / Object Service**: Abstraction layer for business logic reuse in API Tests
 - **Factory Pattern**: Data generation and management for tests in general
 - **Strategy Pattern**: Different testing strategies implementation
-- **Page Object Model (POM)**: Classi pattern for use in WEB UI.
+- **Page Object Model (POM)**: Classic pattern for use in WEB UI.
 - **Facade Pattern**: Interface group tests simplification
 
 ## Project Structure
 
 ```
-Documentation/
-├── Examples/Kickoff/           # implementation examples for human use only, ignore this folder.
-│   └── API/                   # API testing examples for human use only, ignore this folder.
-└── Patterns/                   # Design pattern documentation (.md files)
-(em construção)
+Design Patterns ROBOT/
+├── README.md                     # Informações do repositório para humanos
+├── .gitignore
+├── CLAUDE.md                     # Arquivo de instruções do Claude                    
+├── Documentation/
+│   ├── Examples/Kickoff/         # Exemplos para referência humana (ignorar)
+│   ├── Patterns/                 # Documentação dos Design Patterns
+│   └── Use_Cases/                # Casos de uso DummyJSON (foco atual)
+├── tests/
+│   ├── api/                      # Testes de APIs organizados por serviço
+│   │   ├── products/             # Testes da API de produtos
+│   │   ├── carts/                # Testes da API de carrinho
+│   │   ├── users/                # Testes da API de usuários
+│   │   └── auth/                 # Testes de autenticação
+│   ├── ui/                       # Testes de interface web
+│   │   ├── login/                # Testes de login web
+│   │   ├── navigation/           # Testes de navegação
+│   │   └── forms/                # Testes de formulários
+│   └── integration/              # Testes end-to-end (opcional)
+├── resources/
+│   ├── apis/                     # Service Objects para APIs (Library-Keyword Pattern)
+│   │   ├── products_service.resource
+│   │   ├── users_service.resource
+│   │   └── auth_service.resource
+│   ├── pages/                    # Page Objects para UI (POM Pattern)
+│   │   ├── login_page.resource
+│   │   └── home_page.resource
+│   ├── keywords/                 # Keywords genéricas e comuns
+│   │   └── common_keywords.resource
+│   ├── facades/                  # Keywords de alto nível (Facade Pattern)
+│   │   └── business_workflows.resource
+│   └── data/                     # Dados de teste não sensíveis
+├── libraries/                    # Bibliotecas Python customizadas
+│   ├── data_factory.py           # Factory Pattern para geração de dados
+│   ├── config_strategy.py        # Strategy Pattern para configurações
+│   └── service_objects/          # Service Objects em Python
+├── data/
+│   ├── testdata/                 # Massa de dados para testes
+│   ├── Full_API_Data/            # Massa completa das apis para montagem dos testes
+│   └── fixtures/                 # Dados de setup/teardown
+├── results/                      # Resultados dos testes (logs, reports)
+└── .claude/                      # Instruções de utilização do Claude Code
+└── .github/
+    └── workflows/                # Configurações CI/CD
+    └── instructions/             # Instruções para utilização do Projeto para o copilot (ignorar)
+    └── copilot-instructions.md   # Instruções para utilização pessoal do copilot (ignorar)
 ```
-
-## Key Architecture Concepts
-
-### Robot testing for API
-(em contrução)
-
-### Robot testing for web ui
-- **Elements**: Centralized locator management using .resource files
-- **Steps**: Reusable test step implementations following BDD patterns
-- **Tests**: Test case definitions that import and use Steps
-- **Resource**: Shared configuration and utility files
 
 ## Commands
 
@@ -52,15 +92,6 @@ Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo 
 - JSONLibrary 0.5.0+
 - Pabot 2.17.0+ (parallel execution)
 
-## Development Guidelines
-
-- Always add explanatory comments for complex or non-trivial code sections
-- Never delete existing comments unless they are irrelevant or incorrect
-- When debugging, add comments indicating debug-only code and remove unnecessary files/comments when finished
-- Include filename and line number in log messages
-- Execute strictly what is requested; ask permission for additional changes
-- Keep `CLAUDE.md` updated with code changes and project updates
-
 ## Test Development
 
 ### Robot testing for API
@@ -68,17 +99,15 @@ Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo 
 
 
 ### Robot testing for web ui
-- Use BDD-style keywords (Dado/Given, Quando/When, Então/Then) for Portuguese test cases
-- Organize test steps in separate .robot files under Steps/ directory
-- Store page elements in .resource files under Elements/ directory
-- Import necessary Steps and Elements in test files using Resource declarations
-- Follow the established project structure pattern for consistency
+(- Use BDD-style keywords (Dado/Given, Quando/When, Então/Then) for Portuguese test cases
+(em construção)
+- Follow the established project structure pattern for consistency)
 
 # Instruções gerais de codificação do projeto Design Patterns Robot
 
 - O projeto utiliza Robot Framework para automação de testes em centenas de cenários, APIs e Interfaces em diferentes plataformas e ambientes.
 - O contexto do projeto envolve CI/CD e testes funcionais (robot), portanto, o código deve ser robusto e eficiente.
-- O ambiente possui conexão com o banco de dados para validação e geração de massa de dados atemporal.
+- O ambiente possuirá conexão com o banco de dados para validação e geração de massa de dados atemporal.
 - O principio DRY (Don't Repeat Yourself) deve ser aplicado para evitar duplicação de código em todo o projeto.
 - O foco principal é a aplicação de Padrões de Projeto (Design Patterns) em testes automatizados:
     - Library-keyword Patterns / Object Service, para abstrair a lógica de negócios e facilitar a reutilização de código em APIs.
@@ -92,26 +121,10 @@ Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo 
 ## Andamento do Projeto
 Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
 
-- O projeto está em andamento, ainda com definição de estrutura de pastas e organização de arquivos.
-- A documentação está sendo atualizada conforme novas implementações e padrões são aplicados.
-
-## Estrutura de Pastas
-A estrutura de pastas do projeto é organizada da seguinte forma:
-
-- Para paginas web: A definir.
-
-- Para APIs: A definir.
-
+- Implementar em robot framework os primeiros casos de uso.
 
 ## Foco atual
-- Desevolver casos de uso de teste no portal https://dummyjson.com e escreve-los na pasta Documentation/Use_Cases/, usar os seguintes docs:
-  - https://dummyjson.com/docs/products
-  - https://dummyjson.com/docs/carts
-  - https://dummyjson.com/docs/users
-  - https://dummyjson.com/docs/auth
-
-
-
+- Implementar os casos de testes desenvolvidos na pasta data/Full_API_Data/*
 
 ## Objetivo final
 - Criar um repositório de testes automatizados com diversos casos de testes funcionais, aplicando os princípios de Padrões de Projeto (Design Patterns) e boas práticas de codificação.

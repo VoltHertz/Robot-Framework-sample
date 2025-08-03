@@ -1,4 +1,4 @@
-### **Documentação de Casos de Uso - API de Autenticação ([dummyjson.com/auth](https://dummyjson.com/auth))**
+# **Documentação de Casos de Uso - API de Autenticação ([dummyjson.com/auth](https://dummyjson.com/auth))**
 Api described on: `https://dummyjson.com/docs/auth`
 ---
 

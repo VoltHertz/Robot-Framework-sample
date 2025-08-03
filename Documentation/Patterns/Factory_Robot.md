@@ -1,5 +1,3 @@
-Claro, aqui está o documento completo formatado em Markdown. Você pode copiar e colar o conteúdo abaixo diretamente em uma página do Confluence.
-
 # Dominando a Geração de Dados de Teste no Robot Framework com o Padrão Factory
 
 ## Introdução: O Imperativo Estratégico da Gestão Avançada de Dados de Teste
