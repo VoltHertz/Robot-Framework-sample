@@ -1,6 +1,6 @@
-# CLAUDE.md
+# GLM.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+This file provides guidance to GLM 4.5 when working with code in this repository.
 
 ## Project Overview
 
@@ -13,7 +13,7 @@ This is a Robot Framework test automation project focused on implementing Design
 - When debugging, add comments indicating debug-only code and remove unnecessary files/comments when finished
 - Include filename and line number in log messages
 - Execute strictly what is requested; ask permission for additional changes
-- Keep `CLAUDE.md` updated with code changes and project updates
+- Keep `.kilocode/rules/GLM.md` updated with code changes and project updates
 - Sempre coloque o nome do arquivo e o número da linha na mensagem de log.
 
 ## Architecture & Design Patterns
@@ -140,5 +140,14 @@ Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
 - Criar um repositório de testes automatizados com diversos casos de testes funcionais, aplicando os princípios de Padrões de Projeto (Design Patterns) e boas práticas de codificação.
 - Garantir que o código seja reutilizável, modular e fácil de manter.
 - O projeto visará ser uma referência para a aplicação de Padrões de Projeto em testes automatizados, especialmente no contexto de CI/CD e testes funcionais com Robot Framework pensando na situação em que temos centenas de cenários, APIs e Interfaces em diferentes plataformas e ambientes em um mesmo repositório.
+
+## Particularidades de usar Kilo Code com GLM 4.5
+- Para iniciar o servidor de indexação qdrant e a llm de indexação:
+    - wsl sudo systemctl start docker
+    - wsl sudo docker run -p 6333:6333 qdrant/qdrant
+    - ollama serve (servidor já está rodando, verificar com ollama ps)
+    - Para carregar modelo de embedding permanentemente:
+      Invoke-RestMethod -Uri "http://localhost:11434/api/embed" -Method POST -ContentType "application/json" -Body '{"model": "mxbai-embed-large", "input": "preload", "keep_alive": -1}'
+    - Verificar modelos ativos: ollama ps
 
 This is a reference implementation for applying Design Patterns in Robot Framework test automation.

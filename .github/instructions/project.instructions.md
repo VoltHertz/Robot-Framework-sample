@@ -26,7 +26,8 @@ Design Patterns ROBOT/
 ├── Documentation/
 │   ├── Examples/Kickoff/         # Exemplos para referência humana (ignorar)
 │   ├── Patterns/                 # Documentação dos Design Patterns
-│   └── Use_Cases/                # Casos de uso DummyJSON (foco atual)
+│   └── Use_Cases/                # Casos de uso DummyJSON
+│   └── libs/                     # Documentação atualizada das libs usadas no projeto (foco atual)
 ├── tests/
 │   ├── api/                      # Testes de APIs organizados por serviço
 │   │   ├── products/             # Testes da API de produtos
@@ -108,13 +109,22 @@ Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo 
 - Manter uma estrutura clara, separando Casos de Teste, Palavras-chave (Keywords), Recursos e Variáveis.
 - As palavras-chave devem ser reutilizáveis e modulares.
 
-## Andamento do Projeto
+## Backlog de atividades
 Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
 
-- Implementar em robot framework os primeiros casos de uso.
+- Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*
 
 ## Foco atual
-- Implementar os casos de testes desenvolvidos na pasta data/Full_API_Data/*
+- Desenvolver documentação atualizada sobre as libraries em Documentation/libs para que a IA use sempre as melhores praticas mais atuais. As libs utilizadas estão descritas em "Documentation/libs/All_library_resume.md". A documentação das seguintes libs já foi produzida:
+    - browserlibrary.md
+    - requestslibrary.md
+    - robotframework.md
+    - seleniumlibrary.md
+
+## Atividades finalizas
+- Casos de uso da aplicação desenvolvidos na pasta Documentation/Use_Cases/*
+- Definidos os patterns a serem usados na aplicação na pasta Documentation/Patterns/
+- Estrutura de pastas do projeto desenvolvido a partir do documento Documentation/Infra_de_pastas.md 
 
 ## Objetivo final
 - Criar um repositório de testes automatizados com diversos casos de testes funcionais, aplicando os princípios de Padrões de Projeto (Design Patterns) e boas práticas de codificação.
