@@ -125,11 +125,17 @@ Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
 - Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*
 
 ## Foco atual
-- Desenvolver documentação atualizada sobre as libraries em Documentation/libs para que a IA use sempre as melhores praticas mais atuais. As libs utilizadas estão descritas em "Documentation/libs/All_library_resume.md". A documentação das seguintes libs já foi produzida:
-    - browserlibrary.md
-    - requestslibrary.md
-    - robotframework.md
-    - seleniumlibrary.md
+- Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*
+
+## Atividades finalizadas recentemente
+- Documentação atualizada sobre as libraries em Documentation/libs para que a IA use sempre as melhores praticas mais atuais. As libs utilizadas estão descritas em "Documentation/libs/All_library_resume.md". A documentação das seguintes libs já foi produzida:
+    - browserlibrary.md (Robot Framework Browser Library powered by Playwright)
+    - robotframework.md (Robot Framework 7.0+ core documentation)
+    - requestslibrary.md (RequestsLibrary for HTTP/REST API testing)
+    - robotframework-faker.md (Faker library for test data generation with Brazilian localization)
+    - jsonlibrary.md
+    - pabot.md
+    - databaselibrary.md
 
 ## Atividades finalizas
 - Casos de uso da aplicação desenvolvidos na pasta Documentation/Use_Cases/*

@@ -1,186 +1,578 @@
-# Robot Framework Browser Library
+# Browser Library Documentation (Robot Framework)
 
-## Visão Geral
+## Overview
 
-A Robot Framework Browser Library é uma biblioteca moderna de automação web para o Robot Framework, alimentada pelo Playwright. Ela oferece uma abordagem poderosa e eficiente para automação de navegadores, com suporte para múltiplos navegadores e recursos avançados de automação.
+Browser Library é uma biblioteca moderna do Robot Framework alimentada pelo Playwright, projetada para automação de testes web de alta performance. É a sucessora recomendada da SeleniumLibrary, oferecendo melhor velocidade, confiabilidade e funcionalidades avançadas para testes de interface web.
+
+## Requisitos do Sistema (2025)
+
+- **Python:** 3.9+ (obrigatório)
+- **Node.js:** Versões LTS 18, 20 ou 22
+- **Robot Framework:** 5.0+
+- **Sistema Operacional:** Windows, macOS, Linux
+- **Espaço em Disco:** ~700MB (inclui Chromium, Firefox e WebKit)
 
 ## Instalação
 
-### Instalação Inicial
+### 1. Instalar Node.js
+```bash
+# Baixar de https://nodejs.org/en/download/
+# Verificar instalação
+node --version
+npm --version
+```
 
-Para instalar a Browser Library pela primeira vez:
+### 2. Atualizar pip
+```bash
+pip install -U pip
+```
 
+### 3. Instalar a Biblioteca
 ```bash
 pip install robotframework-browser
-rfbrowser init
 ```
 
-### Atualização
-
-Para atualizar uma instalação existente:
-
+### 4. Inicializar Dependências do Playwright
 ```bash
-pip install --upgrade robotframework-browser
-rfbrowser clean-node
 rfbrowser init
+# ou se rfbrowser não for encontrado:
+python -m Browser.entry init
 ```
 
-### Instalação de Versão Específica
+## Versão Atual
 
-Para instalar uma versão específica:
+**Versão:** 19.6.1 (última versão 2025)
+**Playwright:** Testado com 1.53.1
+**Data de Lançamento:** Junho 2025
 
-```bash
-pip install robotframework-browser==X.X.X
-rfbrowser init
+## Importação
+
+```robot
+*** Settings ***
+Library    Browser
+# Com configurações específicas
+Library    Browser    timeout=10s    enable_presenter_mode=${True}
 ```
 
-## Configuração
+## Conceitos Fundamentais
 
-A Browser Library requer a inicialização do Playwright após a instalação. O comando `rfbrowser init` baixa os binários necessários dos navegadores suportados.
+### Contextos de Navegação
+- **Browser Context:** Ambiente isolado dentro do navegador
+- **Page:** Página individual dentro do contexto
+- **New Browser:** Inicia nova instância do navegador
+- **New Context:** Cria novo contexto isolado
+- **New Page:** Abre nova página
 
-## Principais Recursos
+### Estratégias de Seletores
 
-### Suporte a Múltiplos Navegadores
-- Chromium (Chrome, Edge)
-- Firefox
-- WebKit (Safari)
+A Browser Library suporta as mesmas estratégias do Playwright:
 
-### Seletores Avançados
+1. **CSS (padrão):** `div.class-name`
+2. **XPath:** `xpath=//div[@class='class-name']`  
+3. **Text:** `text=Texto do elemento`
+4. **ID:** `id=element-id`
 
-A biblioteca oferece um sistema de seletores poderoso e flexível:
-
-#### Estratégias de Seleção
-- **Text selectors**: `"Texto do elemento"`
-- **CSS selectors**: `css=div.classe`
-- **XPath selectors**: `xpath=//div[@class='exemplo']`
-- **ID selectors**: `id=elemento-id`
-
-#### Encadeamento de Seletores
-
-A Browser Library permite encadear diferentes estratégias de seleção usando o operador `>>`:
-
-```robotframework
-# Seleciona elemento contendo "Login" e depois seu input pai
+### Seletores Combinados
+```robot
+# Texto + XPath
 Click    "Login" >> xpath=../input
 
-# Seleciona div com CSS e depois botão com texto
+# CSS + Texto  
 Click    div.dialog >> "Ok"
+
+# iFrame
+Get Text    iframe#mce_0_ifr >>> id=tinymce
 ```
 
-### Navegação e Interação
+## Principais Keywords
 
-```robotframework
+### Navegação e Controle de Browser
+```robot
+*** Test Cases ***
+Exemplo Básico de Navegação
+    # Iniciar novo navegador
+    New Browser    chromium    headless=False
+    
+    # Criar novo contexto
+    New Context    viewport={'width': 1920, 'height': 1080}
+    
+    # Abrir nova página
+    New Page    https://example.com
+    
+    # Fechar página, contexto e browser
+    Close Page
+    Close Context  
+    Close Browser
+```
+
+### Interação com Elementos
+```robot
+*** Test Cases ***
+Interações Básicas
+    New Page    https://example.com
+    
+    # Clicar em elementos
+    Click    id=submit-button
+    Click    text=Enviar
+    Click    css=.btn-primary
+    
+    # Preencher campos
+    Fill Text    id=username    meu_usuario
+    Fill Text    xpath=//input[@name='password']    minha_senha
+    
+    # Selecionar opções
+    Select Options By    id=country    value    BR
+    Select Options By    css=select    text    Brasil
+    
+    # Upload de arquivo
+    Upload File By Selector    input[type=file]    /path/to/file.pdf
+```
+
+### Validações e Asserções
+```robot
+*** Test Cases ***
+Validações
+    New Page    https://example.com
+    
+    # Verificar texto
+    Get Text    h1    contains    Bem-vindo
+    Get Text    css=.title    ==    Título Exato
+    
+    # Verificar elementos
+    Get Element Count    css=.item    ==    5
+    Wait For Elements State    id=loading    hidden
+    
+    # Screenshots
+    Take Screenshot    full_page=True
+    Take Screenshot    selector=css=.form    filename=form.png
+```
+
+## Implementação do Page Object Model (POM)
+
+### Estrutura Base do Page Object
+```robot
+# login_page.resource
 *** Settings ***
-Library   Browser
+Library    Browser
+
+*** Variables ***
+${LOGIN_URL}            https://app.example.com/login
+${USERNAME_FIELD}       id=username
+${PASSWORD_FIELD}       id=password  
+${LOGIN_BUTTON}         css=button[type="submit"]
+${ERROR_MESSAGE}        css=.alert-error
+${SUCCESS_MESSAGE}      css=.alert-success
+
+*** Keywords ***
+Abrir Página de Login
+    [Documentation]    Navega para a página de login
+    New Page    ${LOGIN_URL}
+    Wait For Elements State    ${USERNAME_FIELD}    visible
+
+Preencher Credenciais
+    [Documentation]    Preenche campos de usuário e senha
+    [Arguments]    ${username}    ${password}
+    Fill Text    ${USERNAME_FIELD}    ${username}
+    Fill Text    ${PASSWORD_FIELD}    ${password}
+
+Clicar Botão Login
+    [Documentation]    Clica no botão de login
+    Click    ${LOGIN_BUTTON}
+
+Verificar Mensagem de Erro
+    [Documentation]    Verifica se mensagem de erro é exibida
+    [Arguments]    ${mensagem_esperada}
+    ${mensagem}=    Get Text    ${ERROR_MESSAGE}
+    Should Contain    ${mensagem}    ${mensagem_esperada}
+
+Verificar Login Bem Sucedido
+    [Documentation]    Verifica se login foi realizado com sucesso
+    Wait For Elements State    ${SUCCESS_MESSAGE}    visible
+    Get Text    ${SUCCESS_MESSAGE}    contains    sucesso
+```
+
+### Page Object Completo
+```robot
+# home_page.resource
+*** Settings ***
+Library    Browser
+
+*** Variables ***
+# Seletores
+${MENU_USUARIO}         css=[data-testid="user-menu"]
+${OPCAO_PERFIL}         text=Meu Perfil
+${OPCAO_LOGOUT}         text=Sair
+${TITULO_PAGINA}        css=h1.page-title
+${BOTAO_NOVA_TAREFA}    css=button[data-action="new-task"]
+
+# URLs
+${HOME_URL}             https://app.example.com/dashboard
+
+*** Keywords ***
+Verificar Se Está Na Home
+    [Documentation]    Verifica se usuário está na página inicial
+    Get Url    contains    dashboard
+    Wait For Elements State    ${TITULO_PAGINA}    visible
+    Get Text    ${TITULO_PAGINA}    ==    Dashboard
+
+Abrir Menu de Usuario
+    [Documentation]    Abre o menu do usuário logado
+    Click    ${MENU_USUARIO}
+    Wait For Elements State    ${OPCAO_PERFIL}    visible
+
+Acessar Perfil do Usuario
+    [Documentation]    Navega para página de perfil
+    Abrir Menu de Usuario
+    Click    ${OPCAO_PERFIL}
+
+Fazer Logout
+    [Documentation]    Realiza logout do sistema
+    Abrir Menu de Usuario
+    Click    ${OPCAO_LOGOUT}
+    # Aguardar redirecionamento para login
+    Wait For Elements State    ${USERNAME_FIELD}    visible
+
+Criar Nova Tarefa
+    [Documentation]    Inicia criação de nova tarefa
+    Click    ${BOTAO_NOVA_TAREFA}
+    # Aguardar modal/página de criação
+    Wait For Elements State    css=.task-form    visible
+```
+
+### Uso dos Page Objects
+```robot
+*** Settings ***
+Resource    ../resources/pages/login_page.resource
+Resource    ../resources/pages/home_page.resource
 
 *** Test Cases ***
-Exemplo de Teste
-    New Page    https://playwright.dev
-    Get Text    h1    contains    Playwright
-    Click    "Get Started"
+Login Com Sucesso
+    [Documentation]    Testa login com credenciais válidas
+    [Setup]    New Browser    chromium    headless=False
+    [Teardown]    Close Browser
+    
+    # Usando Page Objects
+    Abrir Página de Login
+    Preencher Credenciais    usuario_valido    senha_valida
+    Clicar Botão Login
+    
+    # Verificar se chegou na home
+    Verificar Se Está Na Home
+
+Login Com Credenciais Inválidas
+    [Documentation]    Testa login com credenciais inválidas
+    [Setup]    New Browser    chromium    headless=False
+    [Teardown]    Close Browser
+    
+    Abrir Página de Login
+    Preencher Credenciais    usuario_invalido    senha_invalida
+    Clicar Botão Login
+    Verificar Mensagem de Erro    Credenciais inválidas
+
+Fluxo Completo de Usuario
+    [Documentation]    Testa fluxo completo: login -> criar tarefa -> logout
+    [Setup]    New Browser    chromium    headless=False
+    [Teardown]    Close Browser
+    
+    # Login
+    Abrir Página de Login
+    Preencher Credenciais    usuario_valido    senha_valida
+    Clicar Botão Login
+    
+    # Usar sistema
+    Verificar Se Está Na Home
+    Criar Nova Tarefa
+    
+    # Logout
+    Fazer Logout
+    # Verificar volta para login
+    Wait For Elements State    ${USERNAME_FIELD}    visible
 ```
 
-### Manipulação de Elementos
+## Esperas Inteligentes
 
-```robotframework
-# Obter referência de elemento
-${ref}=    Get Element    h1
+### Auto-Wait
+A Browser Library possui esperas automáticas inteligentes:
 
-# Obter propriedade
-Get Property    ${ref}    innerText    ==    Login Page
-
-# Executar JavaScript
-Evaluate JavaScript    ${ref}    (elem) => elem.innerText = "abc"
+```robot
+*** Test Cases ***
+Esperas Automáticas
+    New Page    https://example.com
+    
+    # Aguarda automaticamente elemento estar visível e clicável
+    Click    id=dynamic-button
+    
+    # Aguarda elemento aparecer antes de obter texto
+    Get Text    css=.dynamic-content
+    
+    # Aguarda campo estar editável antes de preencher
+    Fill Text    id=ajax-field    valor
 ```
 
-### Esperas Assíncronas
-
-```robotframework
-# Esperar por resposta HTTP
-${promise}=    Promise To    Wait For Response    matcher=    timeout=3s
-Click    \#delayed_request
-${body}=    Wait For    ${promise}
+### Esperas Explícitas
+```robot
+*** Test Cases ***
+Esperas Explicitas
+    New Page    https://example.com
+    
+    # Aguardar estado específico
+    Wait For Elements State    id=loading-spinner    hidden    timeout=30s
+    Wait For Elements State    css=.results    visible    timeout=10s
+    
+    # Aguardar condições
+    Wait For Condition    element => element.textContent.includes('Carregado')    
+    ...    css=.status    timeout=5s
+    
+    # Aguardar requisição de rede
+    Wait For Response    matcher=/api/users    timeout=30s
 ```
 
-### Requisições HTTP
+## Configurações Avançadas
 
-```robotframework
-# Enviar requisição HTTP
-${response}=    HTTP    /api/post    POST    {"name": "John"}
-Should Be Equal    ${response.status}    ${200}
-```
-
-## Extensões JavaScript
-
-A Browser Library suporta extensões JavaScript personalizadas:
-
-### Arquivo JavaScript (mymodule.js)
-```javascript
-async function myGoToKeyword(url, page, logger) {
-    logger("Going to " + url)
-    return await page.goto(url);
-}
-myGoToKeyword.rfdoc = "This is my own go to keyword";
-exports.__esModule = true;
-exports.myGoToKeyword = myGoToKeyword;
-```
-
-### Uso no Robot Framework
-```robotframework
+### Configuração de Contexto
+```robot
 *** Settings ***
-Library   Browser  jsextension=${CURDIR}/mymodule.js
+Library    Browser
+Suite Setup    Configurar Browser Suite
+
+*** Keywords ***
+Configurar Browser Suite
+    # Configurações de contexto
+    &{context_options}=    Create Dictionary
+    ...    viewport={'width': 1920, 'height': 1080}
+    ...    locale=pt-BR
+    ...    timezone=America/Sao_Paulo
+    ...    permissions=["geolocation", "notifications"]
+    ...    geolocation={'latitude': -23.5505, 'longitude': -46.6333}
+    
+    New Browser    chromium    headless=False
+    New Context    &{context_options}
+```
+
+### Interceptação de Requisições
+```robot
+*** Test Cases ***
+Interceptar Requisições
+    New Page    https://example.com
+    
+    # Interceptar e modificar requisições
+    Route    **/api/users    POST    response_body={"success": true}
+    
+    # Fazer ação que dispara requisição
+    Click    id=save-button
+    
+    # Verificar requisição interceptada
+    Wait For Response    matcher=/api/users
+```
+
+## Debugging e Troubleshooting
+
+### Screenshots e Vídeos
+```robot
+*** Test Cases ***
+Captura de Evidências
+    New Page    https://example.com
+    
+    # Screenshot de página completa
+    Take Screenshot    full_page=True    filename=tela_completa.png
+    
+    # Screenshot de elemento específico
+    Take Screenshot    selector=css=.form-container    filename=formulario.png
+    
+    # Habilitar gravação de vídeo
+    New Context    recordVideo={'dir': 'videos/', 'size': {'width': 1920, 'height': 1080}}
+```
+
+### Modo Debug
+```robot
+*** Settings ***
+Library    Browser    enable_presenter_mode=${True}
 
 *** Test Cases ***
-Example Test
-   New Page
-   myGoToKeyword   https://www.robotframework.org
+Teste Com Debug
+    New Page    https://example.com
+    
+    # Pausar execução para debug
+    Pause Execution    Inspecionar página antes de continuar
+    
+    Click    id=next-step
 ```
 
-## Configuração de Estilos
+## Melhores Práticas
 
-A biblioteca permite configuração de estilos visuais para elementos:
+### 1. Estrutura de Testes
+```robot
+*** Settings ***
+Library    Browser
+Suite Setup       Abrir Browser Suite
+Suite Teardown    Fechar Browser Suite
+Test Setup        Nova Página de Teste
+Test Teardown     Limpar Página de Teste
 
-```python
-{'duration': datetime.timedelta(seconds=2), 'width': '2px', 'style': 'dotted', 'color': 'blue'}
+*** Keywords ***
+Abrir Browser Suite
+    New Browser    chromium    headless=${HEADLESS}
+    
+Nova Página de Teste
+    New Context    
+    New Page
+    
+Limpar Página de Teste
+    Close Page
+    Close Context
+    
+Fechar Browser Suite
+    Close Browser
 ```
 
-## Docker
+### 2. Seletores Robustos
+```robot
+*** Variables ***
+# Preferir data attributes
+${BOTAO_SALVAR}    css=[data-testid="save-button"]
 
-A Browser Library também está disponível como imagem Docker:
+# IDs estáveis
+${CAMPO_EMAIL}     id=email
 
-```bash
-# Baixar imagem
-docker pull marketsquare/robotframework-browser
+# Classes específicas
+${MENU_USUARIO}    css=.user-menu-dropdown
 
-# Executar testes
-docker run --rm -v $(pwd)/atest/test/:/test --ipc=host --user pwuser --security-opt seccomp=seccomp_profile.json marketsquare/robotframework-browser:latest bash -c "robot --outputdir /test/output /test"
+# Texto como último recurso (pode mudar com i18n)
+${LINK_AJUDA}      text=Ajuda
 ```
 
-## Vantagens em Relação ao Selenium
+### 3. Organização de Resources
+```
+resources/
+├── pages/
+│   ├── common/
+│   │   ├── base_page.resource
+│   │   └── navigation.resource
+│   ├── login_page.resource
+│   ├── home_page.resource
+│   └── profile_page.resource
+├── components/
+│   ├── modal.resource
+│   ├── form.resource
+│   └── table.resource
+└── keywords/
+    ├── common_keywords.resource
+    └── test_data.resource
+```
 
-1. **Performance**: Baseada no Playwright, oferece melhor performance
-2. **Seletores mais intuitivos**: Sistema de seletores mais flexível e poderoso
-3. **Esperas inteligentes**: Esperas automáticas e inteligentes
-4. **Multi-navegador**: Suporte nativo a múltiplos navegadores
-5. **Moderno**: Arquitetura moderna baseada em Node.js e Playwright
+## Migração da SeleniumLibrary
 
-## Boas Práticas
+### Mapeamento de Keywords Comuns
 
-1. Use seletores semânticos quando possível
-2. Aproveite o encadeamento de seletores para elementos complexos
-3. Utilize as esperas assíncronas para operações que dependem de respostas
-4. Crie extensões JavaScript para funcionalidades customizadas
-5. Mantenha a biblioteca atualizada para acessar os recursos mais recentes
+| SeleniumLibrary | Browser Library |
+|-----------------|-----------------|
+| `Open Browser` | `New Browser` + `New Page` |
+| `Input Text` | `Fill Text` |
+| `Click Element` | `Click` |
+| `Wait Until Element Is Visible` | `Wait For Elements State    visible` |
+| `Get Text` | `Get Text` |
+| `Select From List By Value` | `Select Options By    value` |
+| `Capture Page Screenshot` | `Take Screenshot` |
+
+### Exemplo de Migração
+```robot
+# SeleniumLibrary (ANTES)
+*** Settings ***
+Library    SeleniumLibrary
+
+*** Test Cases ***
+Teste Selenium
+    Open Browser    https://example.com    chrome
+    Input Text    id=username    meuusuario
+    Click Element    id=submit
+    Wait Until Element Is Visible    id=result
+    ${text}=    Get Text    id=result
+    Close Browser
+
+# Browser Library (DEPOIS)
+*** Settings ***
+Library    Browser
+
+*** Test Cases ***
+Teste Browser
+    New Browser    chromium
+    New Page    https://example.com
+    Fill Text    id=username    meuusuario  
+    Click    id=submit
+    Wait For Elements State    id=result    visible
+    ${text}=    Get Text    id=result
+    Close Browser
+```
 
 ## Integração com CI/CD
 
-A Browser Library é ideal para ambientes de CI/CD devido à:
-- Instalação simplificada via pip
-- Suporte a Docker
-- Execução headless por padrão
-- Relatórios detalhados
-- Compatibilidade com ferramentas de pipeline
+### Configuração Docker
+```dockerfile
+FROM mcr.microsoft.com/playwright:v1.53.1-focal
 
-## Conclusão
+RUN pip install robotframework-browser
+RUN rfbrowser init
+```
 
-A Robot Framework Browser Library representa uma evolução significativa na automação web com Robot Framework, oferecendo uma abordagem moderna, eficiente e poderosa para testes de interface do usuário. Sua integração com o Playwright e sistema de seletores avançados a tornam uma excelente escolha para projetos de automação web modernos.
+### GitHub Actions
+```yaml
+- name: Install Browser Library
+  run: |
+    pip install robotframework-browser
+    rfbrowser init
+    
+- name: Run Tests
+  run: |
+    robot --outputdir results tests/
+```
+
+## Performance e Otimização
+
+### Execução Paralela
+```bash
+# Com pabot
+pabot --processes 4 tests/
+
+# Browser context reutilização
+robot --variable BROWSER_REUSE:True tests/
+```
+
+### Configurações de Performance
+```robot
+*** Settings ***
+Library    Browser    
+...    timeout=30s
+...    enable_presenter_mode=False
+...    strict=True
+```
+
+## Recursos Avançados
+
+### Mobile Testing
+```robot
+*** Test Cases ***
+Teste Mobile
+    ${mobile_context}=    Create Dictionary
+    ...    viewport={'width': 375, 'height': 667}
+    ...    deviceScaleFactor=2
+    ...    isMobile=True
+    ...    hasTouch=True
+    ...    userAgent=Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X)
+    
+    New Context    &{mobile_context}
+    New Page    https://m.example.com
+```
+
+### Geolocalização
+```robot
+*** Test Cases ***
+Teste Com Localização
+    ${geo_context}=    Create Dictionary
+    ...    geolocation={'latitude': -23.5505, 'longitude': -46.6333}
+    ...    permissions=["geolocation"]
+    
+    New Context    &{geo_context}
+    New Page    https://maps.example.com
+```
+
+A Browser Library representa a evolução da automação web no Robot Framework, oferecendo performance superior, maior confiabilidade e funcionalidades modernas essenciais para projetos de grande escala com centenas de testes funcionais.

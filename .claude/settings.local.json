@@ -1,9 +1,17 @@
 {
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "allow": [
-      "Bash(find:*)"
+      "Bash(find:*)",
+      "WebFetch(domain:robotframework-thailand.github.io)",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:pabot.org)",
+      "WebFetch(domain:www.lambdatest.com)",
+      "WebFetch(domain:rflogs.io)",
+      "WebFetch(domain:marketsquare.github.io)",
+      "WebFetch(domain:testersdock.com)",
+      "WebFetch(domain:pypi.org)"
     ],
     "deny": []
-  },
-  "$schema": "https://json.schemastore.org/claude-code-settings.json"
+  }
 }
