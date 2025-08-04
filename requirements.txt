@@ -1,0 +1,31 @@
+# Robot Framework Authentication Test Suite Requirements
+# Design Patterns ROBOT - Auth API Test Suite
+# File: requirements.txt
+
+# Core Robot Framework
+robotframework>=7.0,<8.0
+
+# HTTP API Testing Libraries
+robotframework-requests>=0.9.7
+robotframework-jsonlibrary>=0.5.0
+
+# Utility Libraries
+robotframework-pabot>=2.17.0
+
+# Optional Development Libraries (uncomment if needed)
+# robotframework-debuglibrary>=2.3.0
+# robotframework-screencaplibrary>=1.6.0
+
+# Data Generation Libraries (for future Factory Pattern implementation)
+# robotframework-faker>=5.0.0
+
+# Database Libraries (for future data management)
+# robotframework-databaselibrary>=1.2.0
+
+# Browser Automation (if web UI tests are added)
+# robotframework-seleniumlibrary>=6.7.0
+# robotframework-browser>=18.0.0
+
+# Additional Test Data Libraries
+# robotframework-datadriver>=1.11.0
+# robotframework-excellibrary>=1.0.0

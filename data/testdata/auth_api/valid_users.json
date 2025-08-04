@@ -1,0 +1,29 @@
+[
+  {
+    "username": "emilys",
+    "password": "emilyspass",
+    "expectedId": 1,
+    "expectedFirstName": "Emily",
+    "expectedLastName": "Johnson",
+    "expectedEmail": "emily.johnson@x.dummyjson.com",
+    "expectedGender": "female"
+  },
+  {
+    "username": "michaelw",
+    "password": "michaelwpass",
+    "expectedId": 2,
+    "expectedFirstName": "Michael",
+    "expectedLastName": "Williams",
+    "expectedEmail": "michael.williams@x.dummyjson.com",
+    "expectedGender": "male"
+  },
+  {
+    "username": "sophiab",
+    "password": "sophiabpass",
+    "expectedId": 3,
+    "expectedFirstName": "Sophia",
+    "expectedLastName": "Brown",
+    "expectedEmail": "sophia.brown@x.dummyjson.com",
+    "expectedGender": "female"
+  }
+]

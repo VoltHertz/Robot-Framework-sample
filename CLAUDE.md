@@ -80,24 +80,66 @@ Design Patterns ROBOT/
 
 ## Commands
 
-### Running Tests
+### Running Tests - Authentication API Suite (Implementado)
+
+**Método Recomendado - Scripts de Execução:**
 ```bash
+# Modo interativo - seleciona opção do menu
+python run_auth_tests.py
+
+# Execução direta
+python run_auth_tests.py 1    # Todos os testes de autenticação
+python run_auth_tests.py 2    # Somente testes de login
+python run_auth_tests.py 6    # Somente smoke tests
+python run_auth_tests.py 7    # Somente testes de erro
 ```
-(em construção)
+
+**Scripts Alternativos:**
+```cmd
+# Windows Batch
+run_auth_tests.bat 1
+
+# PowerShell  
+.\run_auth_tests.ps1 1
+```
+
+**Execução Direta Robot Framework:**
+```bash
+# Todos os testes de autenticação
+python -m robot --outputdir results/api/auth_api/$(date +%Y%m%d_%H%M%S) tests/api/auth/
+
+# Testes específicos por tags
+python -m robot --outputdir results/api/auth_api/$(date +%Y%m%d_%H%M%S) --include smoke tests/api/auth/
+```
 
 ### Dependencies
-Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo Estrutura/requirements.txt`:
+Core dependencies are defined in `requirements.txt` (root):
 - Robot Framework 7.0+
-- SeleniumLibrary 6.7.0+
 - RequestsLibrary 0.9.7+
 - JSONLibrary 0.5.0+
 - Pabot 2.17.0+ (parallel execution)
 
+### Results Organization
+Resultados organizados automaticamente em:
+- `results/api/auth_api/[YYYYMMDD_HHMMSS]/`
+- Cada execução cria pasta única com timestamp
+- Relatórios: log.html, report.html, output.xml
+
 ## Test Development
 
-### Robot testing for API
-(em construção)
+### Robot testing for API (Implementado - Authentication)
 
+**Suite de Autenticação Completa:**
+- **UC-AUTH-001**: Login de usuário (8 casos de teste)
+- **UC-AUTH-002**: Informações do usuário autenticado (4 casos de teste)
+- **UC-AUTH-003**: Refresh de tokens (4 casos de teste)
+- **Testes de Integração**: Workflows end-to-end (4 casos de teste)
+
+**Design Patterns Aplicados:**
+- **Library-Keyword Pattern**: `resources/apis/auth_service.resource`
+- **Data Organization**: `data/testdata/auth_api/*.json`
+- **Facade Pattern**: Keywords de alto nível para workflows completos
+- **Factory Pattern**: Dados estruturados para diferentes cenários
 
 ### Robot testing for web ui
 (- Use BDD-style keywords (Dado/Given, Quando/When, Então/Then) for Portuguese test cases
@@ -119,22 +161,40 @@ Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo 
 - Manter uma estrutura clara, separando Casos de Teste, Palavras-chave (Keywords), Recursos e Variáveis.
 - As palavras-chave devem ser reutilizáveis e modulares.
 
+## Pontos de Referência (Baselines)
+- **v0.1.0-baseline** / **baseline/auth-implementation-ready**: Estado completo da documentação e estrutura base
+  - Documentação completa dos Design Patterns em Documentation/Patterns/
+  - Estrutura de pastas definida conforme Documentation/Infra_de_pastas.md
+  - Libraries documentadas em Documentation/libs/
+  - Casos de uso definidos em Documentation/Use_Cases/
+  - Massa da aplicação baixada em data/Full_API_Data/*
+  - CLAUDE.md atualizado com próximo prompt para implementação
+  - Preparado para implementação dos testes de autenticação
+  - **Como retornar**: `git checkout v0.1.0-baseline` ou `git checkout baseline/auth-implementation-ready`
+
 ## Backlog de atividades
 Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
 
-- Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*. Respeitando a infra de pastas a massa de dados deverá inicialmente ser implementados na pasta data/tesdata/* e utilizando jsons. Somente mais tarde iremos implementar um modelo que irá consultar um banco sqlite. A seguir os testes a serem implementados:
-    - Teste completo do caso de uso Auth_Use_Cases.md incluindo possiveis fluxos alternativos e de erro.
-    - Teste completo do caso de uso Auth_Use_Cases.md incluindo possiveis fluxos alternativos e de erro.
-    - Teste completo do caso de uso Auth_Use_Cases.md incluindo possiveis fluxos alternativos e de erro.
-    - Teste completo do caso de uso Auth_Use_Cases.md incluindo possiveis fluxos alternativos e de erro.
-    
+- Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*. Respeitando a infra de pastas, a massa de dados deverá inicialmente ser implementados na pasta data/testdata/* e utilizando jsons. Somente mais tarde iremos implementar um modelo que irá consultar um banco sqlite. A seguir os testes a serem implementados:
+    - ✅ **Teste completo do caso de uso Auth_Use_Cases.md incluindo possíveis fluxos alternativos e de erro** (IMPLEMENTADO)
+    - Teste completo do caso de uso Users_Use_Case.md incluindo possíveis fluxos alternativos e de erro.
+    - Teste completo do caso de uso Products_Use_Cases.md incluindo possíveis fluxos alternativos e de erro.
+    - Teste completo do caso de uso Carts_Use_Cases.md incluindo possíveis fluxos alternativos e de erro.
+
 ## Foco atual
-- Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*
+- **PRÓXIMA IMPLEMENTAÇÃO**: Implementar os casos de testes completos do arquivo Documentation/Use_Cases/Users_Use_Case.md seguindo o mesmo padrão estabelecido na implementação de Auth:
+  - Dados organizados em data/testdata/users_api/
+  - Service Objects em resources/apis/users_service.resource
+  - Suite executável em tests/api/users/
+  - Scripts de execução com saída dinâmica em results/api/users_api/[timestamp]
+- **PADRÃO ESTABELECIDO**: Seguir o modelo de implementação da suite de autenticação para manter consistência
 
-## Atividades finalizadas recentemente
 
-## Atividades finalizas
-- Documentação atualizada sobre as libraries em Documentation/libs para que a IA use sempre as melhores praticas mais atuais. As libs utilizadas estão descritas em "Documentation/libs/All_library_resume.md". A documentação das seguintes libs já foi produzida:
+
+## Atividades finalizadas
+
+### Fase de Documentação e Planejamento (Concluída)
+- ✅ Documentação atualizada sobre as libraries em Documentation/libs para que a IA use sempre as melhores práticas mais atuais. As libs utilizadas estão descritas em "Documentation/libs/All_library_resume.md". A documentação das seguintes libs já foi produzida:
     - browserlibrary.md (Robot Framework Browser Library powered by Playwright)
     - robotframework.md (Robot Framework 7.0+ core documentation)
     - requestslibrary.md (RequestsLibrary for HTTP/REST API testing)
@@ -142,9 +202,101 @@ Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
     - jsonlibrary.md
     - pabot.md
     - databaselibrary.md
-- Casos de uso da aplicação desenvolvidos na pasta Documentation/Use_Cases/*
-- Definidos os patterns a serem usados na aplicação na pasta Documentation/Patterns/
-- Estrutura de pastas do projeto desenvolvido a partir do documento Documentation/Infra_de_pastas.md 
+- ✅ Casos de uso da aplicação desenvolvidos na pasta Documentation/Use_Cases/*
+- ✅ Definidos os patterns a serem usados na aplicação na pasta Documentation/Patterns/
+- ✅ Estrutura de pastas do projeto desenvolvido a partir do documento Documentation/Infra_de_pastas.md
+
+### Fase de Implementação - Authentication API (Concluída)
+- ✅ **Suite Completa de Autenticação DummyJSON API**:
+  - **Dados de Teste Organizados**: `data/testdata/auth_api/`
+    - `valid_users.json` - Credenciais válidas estruturadas
+    - `invalid_credentials.json` - Cenários de erro organizados
+    - `auth_endpoints.json` - Configuração centralizada de endpoints
+  
+  - **Service Objects (Library-Keyword Pattern)**: `resources/apis/auth_service.resource`
+    - Keywords de operações API (login, user info, token refresh)
+    - Keywords de validação de resposta
+    - Gerenciamento de tokens e utilidades
+    - Tratamento completo de erros
+  
+  - **Suite de Testes Completa**: `tests/api/auth/`
+    - `auth_login_tests.robot` - UC-AUTH-001 (8 casos de teste)
+    - `auth_user_info_tests.robot` - UC-AUTH-002 (4 casos de teste)
+    - `auth_refresh_token_tests.robot` - UC-AUTH-003 (4 casos de teste)  
+    - `auth_integration_tests.robot` - Workflows end-to-end (4 casos de teste)
+    - `auth_test_suite.robot` - Suite principal e validações
+    - `README.md` - Documentação completa de execução
+  
+  - **Scripts de Execução**: Sistema de execução automatizada
+    - `run_auth_tests.py` - Script Python cross-platform com 10 modos de execução
+    - `run_auth_tests.bat` - Script Windows Batch
+    - `run_auth_tests.ps1` - Script PowerShell avançado
+  
+  - **Organização de Resultados**: Sistema de saída dinâmica
+    - Resultados salvos em `results/api/auth_api/[YYYYMMDD_HHMMSS]/`
+    - Nunca sobrescreve execuções anteriores
+    - Relatórios completos: log.html, report.html, output.xml
+  
+  - **Dependências e Configuração**:
+    - `requirements.txt` - Dependências Python atualizadas
+    - `EXECUTION_GUIDE.md` - Guia completo de execução
+  
+  - **Validação Completa**:
+    - ✅ Testes de sintaxe (dry-run) aprovados
+    - ✅ Testes de conectividade API aprovados  
+    - ✅ Execução real com dados válidos aprovados
+    - ✅ Sistema de resultados dinâmicos funcionando
+    - ✅ Todos os design patterns aplicados corretamente
+
+### Cobertura de Testes Implementada
+- **20+ casos de teste** cobrindo todos os cenários definidos em Auth_Use_Cases.md
+- **Cenários de Sucesso**: Login válido, obtenção de user info, refresh de tokens
+- **Cenários de Erro**: Credenciais inválidas, tokens expirados, campos vazios
+- **Testes de Integração**: Workflows completos end-to-end
+- **Testes de Segurança**: Validação de tokens, replay attacks
+
+## Template/Padrão Estabelecido para Próximas Implementações
+
+Com base na implementação completa da suite de autenticação, foi estabelecido o seguinte template que deve ser seguido para as demais APIs (Users, Products, Carts):
+
+### Estrutura de Pastas Padrão:
+```
+data/testdata/[api_name]_api/        # Dados de teste organizados
+├── valid_[entity].json              # Dados válidos estruturados
+├── invalid_[entity].json            # Cenários de erro
+└── [api_name]_endpoints.json        # Configuração de endpoints
+
+resources/apis/                      # Service Objects
+└── [api_name]_service.resource      # Library-Keyword Pattern
+
+tests/api/[api_name]/               # Suite de testes
+├── [api_name]_[operation]_tests.robot  # Testes por operação
+├── [api_name]_integration_tests.robot  # Testes de integração
+├── [api_name]_test_suite.robot         # Suite principal
+└── README.md                           # Documentação de execução
+
+results/api/[api_name]_api/[timestamp]/ # Resultados organizados
+```
+
+### Scripts de Execução Padrão:
+- Script Python cross-platform com múltiplos modos
+- Scripts Windows (batch e PowerShell)
+- Saída dinâmica com timestamp
+- 10 modos de execução padrão (todos, por tipo, por tag, específicos)
+
+### Design Patterns Obrigatórios:
+- **Library-Keyword Pattern**: Service Objects com keywords reutilizáveis
+- **Factory Pattern**: Dados estruturados e organizados
+- **Facade Pattern**: Keywords de alto nível para workflows
+- **DRY Principle**: Máxima reutilização, zero duplicação
+
+### Validação Obrigatória:
+- Testes de sintaxe (dry-run)
+- Testes de conectividade
+- Execução real com validação
+- Sistema de resultados funcionando
+
+Este template garante consistência e qualidade em todas as implementações futuras.
 
 ## Objetivo final
 - Criar um repositório de testes automatizados com diversos casos de testes funcionais, aplicando os princípios de Padrões de Projeto (Design Patterns) e boas práticas de codificação.

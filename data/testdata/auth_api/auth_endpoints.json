@@ -1,0 +1,18 @@
+{
+  "baseUrl": "https://dummyjson.com",
+  "endpoints": {
+    "login": "/auth/login",
+    "me": "/auth/me",
+    "refresh": "/auth/refresh"
+  },
+  "headers": {
+    "contentType": "application/json",
+    "authorization": "Bearer"
+  },
+  "expectedStatusCodes": {
+    "success": 200,
+    "badRequest": 400,
+    "unauthorized": 401,
+    "forbidden": 403
+  }
+}

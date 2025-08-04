@@ -10,7 +10,12 @@
       "WebFetch(domain:rflogs.io)",
       "WebFetch(domain:marketsquare.github.io)",
       "WebFetch(domain:testersdock.com)",
-      "WebFetch(domain:pypi.org)"
+      "WebFetch(domain:pypi.org)",
+      "Bash(mkdir:*)",
+      "Bash(pip install:*)",
+      "Bash(robot:*)",
+      "Bash(python:*)",
+      "Bash(ls:*)"
     ],
     "deny": []
   }
