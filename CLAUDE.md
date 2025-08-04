@@ -108,7 +108,7 @@ Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo 
 
 - O projeto utiliza Robot Framework para automação de testes em centenas de cenários, APIs e Interfaces em diferentes plataformas e ambientes.
 - O contexto do projeto envolve CI/CD e testes funcionais (robot), portanto, o código deve ser robusto e eficiente.
-- O ambiente possuirá conexão com o banco de dados para validação e geração de massa de dados atemporal.
+- O ambiente possuirá conexão com o banco de dados para validação e geração de massa de dados atemporal. No momento iremos manter a massa de dados diretamente nos arquivos. Para depois transportarmos para um .csv e depois um sqlite.
 - O principio DRY (Don't Repeat Yourself) deve ser aplicado para evitar duplicação de código em todo o projeto.
 - O foco principal é a aplicação de Padrões de Projeto (Design Patterns) em testes automatizados:
     - Library-keyword Patterns / Object Service, para abstrair a lógica de negócios e facilitar a reutilização de código em APIs.
@@ -122,12 +122,18 @@ Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo 
 ## Backlog de atividades
 Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
 
-- Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*
-
+- Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*. Respeitando a infra de pastas a massa de dados deverá inicialmente ser implementados na pasta data/tesdata/* e utilizando jsons. Somente mais tarde iremos implementar um modelo que irá consultar um banco sqlite. A seguir os testes a serem implementados:
+    - Teste completo do caso de uso Auth_Use_Cases.md incluindo possiveis fluxos alternativos e de erro.
+    - Teste completo do caso de uso Auth_Use_Cases.md incluindo possiveis fluxos alternativos e de erro.
+    - Teste completo do caso de uso Auth_Use_Cases.md incluindo possiveis fluxos alternativos e de erro.
+    - Teste completo do caso de uso Auth_Use_Cases.md incluindo possiveis fluxos alternativos e de erro.
+    
 ## Foco atual
 - Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*
 
 ## Atividades finalizadas recentemente
+
+## Atividades finalizas
 - Documentação atualizada sobre as libraries em Documentation/libs para que a IA use sempre as melhores praticas mais atuais. As libs utilizadas estão descritas em "Documentation/libs/All_library_resume.md". A documentação das seguintes libs já foi produzida:
     - browserlibrary.md (Robot Framework Browser Library powered by Playwright)
     - robotframework.md (Robot Framework 7.0+ core documentation)
@@ -136,8 +142,6 @@ Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
     - jsonlibrary.md
     - pabot.md
     - databaselibrary.md
-
-## Atividades finalizas
 - Casos de uso da aplicação desenvolvidos na pasta Documentation/Use_Cases/*
 - Definidos os patterns a serem usados na aplicação na pasta Documentation/Patterns/
 - Estrutura de pastas do projeto desenvolvido a partir do documento Documentation/Infra_de_pastas.md 
