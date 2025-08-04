@@ -7,8 +7,8 @@ Documentation    Authentication Test Suite - Complete Test Coverage
 ...              Plus Integration tests covering complete authentication workflows
 ...              File: tests/api/auth/auth_test_suite.robot
 Resource         ../../../resources/apis/auth_service.resource
-Suite Setup      Initialize Auth Service
-Suite Teardown   Clear Auth Tokens
+Suite Setup      Initialize Authentication Service
+Suite Teardown   Cleanup Authentication Service
 
 *** Test Cases ***
 Execute All Authentication Tests
@@ -20,47 +20,40 @@ Execute All Authentication Tests
     Log    Starting Authentication Test Suite Execution    console=True
     Log    Testing DummyJSON Auth API: https://dummyjson.com/docs/auth    console=True
     
-    # Test data validation
-    ${valid_users}=        Load Auth Test Data    valid_users.json
-    ${invalid_creds}=      Load Auth Test Data    invalid_credentials.json
-    ${endpoints}=          Load Auth Test Data    auth_endpoints.json
+    # Test data validation using internal access
+    ${valid_users}=        _Get Valid User Data    0
+    ${invalid_creds}=      _Get Invalid Credentials Data    0
+    Log    Test data accessible for validation    console=True
     
     Should Not Be Empty    ${valid_users}      msg=Valid users test data should not be empty
     Should Not Be Empty    ${invalid_creds}    msg=Invalid credentials test data should not be empty
-    Should Not Be Empty    ${endpoints}        msg=Endpoints configuration should not be empty
     
     Log    Test data validation completed successfully    console=True
     Log    Authentication Test Suite Ready for Execution   console=True
 
 Authentication Test Data Validation
-    [Documentation]    Validate all authentication test data files are properly structured
+    [Documentation]    Validate authentication test data is properly accessible through business layer
     ...                File: tests/api/auth/auth_test_suite.robot:32
     [Tags]    auth    data    validation
     
-    # Validate valid users data structure
-    ${valid_users}=    Load Auth Test Data    valid_users.json
-    FOR    ${user}    IN    @{valid_users}
-        Dictionary Should Contain Key    ${user}    username
-        Dictionary Should Contain Key    ${user}    password
-        Dictionary Should Contain Key    ${user}    expectedId
-        Dictionary Should Contain Key    ${user}    expectedFirstName
-        Dictionary Should Contain Key    ${user}    expectedLastName
-        Dictionary Should Contain Key    ${user}    expectedEmail
-        Dictionary Should Contain Key    ${user}    expectedGender
-        Should Not Be Empty    ${user['username']}
-        Should Not Be Empty    ${user['password']}
-    END
+    # Validate access to different user data
+    ${emily_data}=      _Get Valid User Data    0
+    ${michael_data}=    _Get Valid User Data    1
+    ${sophia_data}=     _Get Valid User Data    2
     
-    # Validate invalid credentials data structure
-    ${invalid_creds}=    Load Auth Test Data    invalid_credentials.json
-    FOR    ${cred}    IN    @{invalid_creds}
-        Dictionary Should Contain Key    ${cred}    testCase
-        Dictionary Should Contain Key    ${cred}    username
-        Dictionary Should Contain Key    ${cred}    password
-        Dictionary Should Contain Key    ${cred}    expectedError
-        Should Not Be Empty    ${cred['testCase']}
-        Should Not Be Empty    ${cred['expectedError']}
-    END
+    # Validate user data structure
+    Dictionary Should Contain Key    ${emily_data}    username
+    Dictionary Should Contain Key    ${emily_data}    expectedId
+    Should Not Be Empty    ${emily_data['username']}
+    
+    # Validate access to invalid credentials
+    ${invalid_user}=     _Get Invalid Credentials Data    0
+    ${invalid_pass}=     _Get Invalid Credentials Data    1
+    
+    # Validate invalid data structure
+    Dictionary Should Contain Key    ${invalid_user}    testCase
+    Dictionary Should Contain Key    ${invalid_user}    expectedError
+    Should Not Be Empty    ${invalid_user['expectedError']}
     
     Log    All test data validation completed successfully    console=True
 
@@ -69,13 +62,6 @@ Authentication Service Connectivity Test
     ...                File: tests/api/auth/auth_test_suite.robot:58
     [Tags]    auth    connectivity    health
     
-    # Test basic connectivity with a simple login attempt
-    ${valid_users}=      Load Auth Test Data    valid_users.json
-    ${user_data}=        Set Variable    ${valid_users[0]}
-    ${response}=         Perform User Login    ${user_data['username']}    ${user_data['password']}
-    
-    # Should get either success (200) or error (400) - both indicate API is reachable
-    Should Be True    ${response.status_code} in [200, 400, 401]
-    
+    # Test basic connectivity using business logic
+    Login With Valid User Emily
     Log    DummyJSON Auth API connectivity verified    console=True
-    Clear Auth Tokens

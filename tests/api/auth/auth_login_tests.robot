@@ -1,83 +1,60 @@
 *** Settings ***
 Documentation    Authentication Login Tests - UC-AUTH-001
-...              Complete test coverage for user login functionality including success and error scenarios
+...              Business logic focused test suite for user login functionality
+...              Following Library-Keyword/Object Service Pattern with proper encapsulation
 ...              File: tests/api/auth/auth_login_tests.robot
 Resource         ../../../resources/apis/auth_service.resource
-Suite Setup      Initialize Auth Service
-Suite Teardown   Clear Auth Tokens
-Test Teardown    Clear Auth Tokens
+Suite Setup      Initialize Authentication Service
+Suite Teardown   Cleanup Authentication Service
+Test Teardown    Cleanup Authentication Service
 
 *** Test Cases ***
-# UC-AUTH-001: Successful Login Tests
-Successful Login With Valid Credentials - Emily
-    [Documentation]    Test successful login with valid credentials for Emily user
-    ...                UC-AUTH-001 - File: tests/api/auth/auth_login_tests.robot:13
+# UC-AUTH-001: Successful Login Business Tests
+User Emily Can Login Successfully
+    [Documentation]    Emily should be able to login with her valid credentials
+    ...                UC-AUTH-001 - File: tests/api/auth/auth_login_tests.robot:12
     [Tags]    auth    login    success    smoke
-    ${valid_users}=    Load Auth Test Data    valid_users.json
-    ${user_data}=      Set Variable    ${valid_users[0]}
-    ${response}=       Perform User Login    ${user_data['username']}    ${user_data['password']}
-    Validate Successful Login Response    ${response}    ${user_data}
+    Login With Valid User Emily
 
-Successful Login With Valid Credentials - Michael
-    [Documentation]    Test successful login with valid credentials for Michael user
-    ...                UC-AUTH-001 - File: tests/api/auth/auth_login_tests.robot:21
+User Michael Can Login Successfully
+    [Documentation]    Michael should be able to login with his valid credentials
+    ...                UC-AUTH-001 - File: tests/api/auth/auth_login_tests.robot:17
     [Tags]    auth    login    success    regression
-    ${valid_users}=    Load Auth Test Data    valid_users.json
-    ${user_data}=      Set Variable    ${valid_users[1]}
-    ${response}=       Perform User Login    ${user_data['username']}    ${user_data['password']}
-    Validate Successful Login Response    ${response}    ${user_data}
+    Login With Valid User Michael
 
-Successful Login With Valid Credentials - Sophia
-    [Documentation]    Test successful login with valid credentials for Sophia user
-    ...                UC-AUTH-001 - File: tests/api/auth/auth_login_tests.robot:29
+User Sophia Can Login Successfully
+    [Documentation]    Sophia should be able to login with her valid credentials
+    ...                UC-AUTH-001 - File: tests/api/auth/auth_login_tests.robot:22
     [Tags]    auth    login    success    regression
-    ${valid_users}=    Load Auth Test Data    valid_users.json
-    ${user_data}=      Set Variable    ${valid_users[2]}
-    ${response}=       Perform User Login    ${user_data['username']}    ${user_data['password']}
-    Validate Successful Login Response    ${response}    ${user_data}
+    Login With Valid User Sophia
 
-# UC-AUTH-001-E1: Invalid Credentials Error Tests
-Login With Invalid Username
-    [Documentation]    Test login failure with invalid username
-    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:37
-    [Tags]    auth    login    error    negative
-    ${invalid_creds}=    Load Auth Test Data    invalid_credentials.json
-    ${test_data}=        Set Variable    ${invalid_creds[0]}
-    ${response}=         Perform User Login    ${test_data['username']}    ${test_data['password']}
-    Validate Invalid Credentials Response    ${response}    ${test_data['expectedError']}
+# UC-AUTH-001-E1: Invalid Credentials Business Error Tests
+System Should Reject Invalid Username
+    [Documentation]    System should reject login attempts with invalid username
+    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:28
+    [Tags]    auth    login    error    negative    security
+    Attempt Login With Invalid Username
 
-Login With Invalid Password
-    [Documentation]    Test login failure with invalid password
-    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:45
-    [Tags]    auth    login    error    negative
-    ${invalid_creds}=    Load Auth Test Data    invalid_credentials.json
-    ${test_data}=        Set Variable    ${invalid_creds[1]}
-    ${response}=         Perform User Login    ${test_data['username']}    ${test_data['password']}
-    Validate Invalid Credentials Response    ${response}    ${test_data['expectedError']}
+System Should Reject Invalid Password
+    [Documentation]    System should reject login attempts with invalid password
+    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:33
+    [Tags]    auth    login    error    negative    security
+    Attempt Login With Invalid Password
 
-Login With Empty Username
-    [Documentation]    Test login failure with empty username
-    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:53
-    [Tags]    auth    login    error    negative    boundary
-    ${invalid_creds}=    Load Auth Test Data    invalid_credentials.json
-    ${test_data}=        Set Variable    ${invalid_creds[2]}
-    ${response}=         Perform User Login    ${test_data['username']}    ${test_data['password']}
-    Validate Invalid Credentials Response    ${response}    ${test_data['expectedError']}
+System Should Reject Empty Username
+    [Documentation]    System should reject login attempts with empty username
+    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:38
+    [Tags]    auth    login    error    negative    boundary    security
+    Attempt Login With Empty Username
 
-Login With Empty Password
-    [Documentation]    Test login failure with empty password
-    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:61
-    [Tags]    auth    login    error    negative    boundary
-    ${invalid_creds}=    Load Auth Test Data    invalid_credentials.json
-    ${test_data}=        Set Variable    ${invalid_creds[3]}
-    ${response}=         Perform User Login    ${test_data['username']}    ${test_data['password']}
-    Validate Invalid Credentials Response    ${response}    ${test_data['expectedError']}
+System Should Reject Empty Password
+    [Documentation]    System should reject login attempts with empty password
+    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:43
+    [Tags]    auth    login    error    negative    boundary    security
+    Attempt Login With Empty Password
 
-Login With Both Fields Empty
-    [Documentation]    Test login failure with both username and password empty
-    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:69
-    [Tags]    auth    login    error    negative    boundary
-    ${invalid_creds}=    Load Auth Test Data    invalid_credentials.json
-    ${test_data}=        Set Variable    ${invalid_creds[4]}
-    ${response}=         Perform User Login    ${test_data['username']}    ${test_data['password']}
-    Validate Invalid Credentials Response    ${response}    ${test_data['expectedError']}
+System Should Reject Completely Empty Credentials
+    [Documentation]    System should reject login attempts with both username and password empty
+    ...                UC-AUTH-001-E1 - File: tests/api/auth/auth_login_tests.robot:48
+    [Tags]    auth    login    error    negative    boundary    security
+    Attempt Login With Both Fields Empty
