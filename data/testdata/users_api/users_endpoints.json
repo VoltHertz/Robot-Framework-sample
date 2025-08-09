@@ -1,0 +1,17 @@
+{
+  "base_url": "https://dummyjson.com",
+  "endpoints": {
+    "login": "/auth/login",
+    "get_all_users": "/users",
+    "get_user_by_id": "/users/{id}",
+    "search_users": "/users/search",
+    "add_user": "/users/add",
+    "update_user": "/users/{id}",
+    "delete_user": "/users/{id}"
+  },
+  "headers": {
+    "content_type": "application/json",
+    "accept": "application/json"
+  },
+  "timeout": 30
+}

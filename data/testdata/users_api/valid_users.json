@@ -1,0 +1,74 @@
+{
+  "test_users": {
+    "admin_user": {
+      "id": 1,
+      "username": "emilys",
+      "password": "emilyspass",
+      "firstName": "Emily",
+      "lastName": "Johnson",
+      "email": "emily.johnson@x.dummyjson.com",
+      "role": "admin"
+    },
+    "regular_user": {
+      "id": 2,
+      "username": "michaelw",
+      "password": "michaelwpass",
+      "firstName": "Michael",
+      "lastName": "Williams",
+      "email": "michael.williams@x.dummyjson.com",
+      "role": "user"
+    },
+    "search_user": {
+      "id": 3,
+      "username": "sophiab", 
+      "password": "sophiabpass",
+      "firstName": "Sophia",
+      "lastName": "Brown",
+      "email": "sophia.brown@x.dummyjson.com",
+      "role": "user"
+    }
+  },
+  "new_user_data": {
+    "firstName": "John",
+    "lastName": "Doe", 
+    "age": 30,
+    "email": "john.doe@example.com",
+    "phone": "+1234567890",
+    "username": "johndoe",
+    "password": "johndoepass",
+    "birthDate": "1993-01-01"
+  },
+  "update_user_data": {
+    "firstName": "Updated John",
+    "lastName": "Updated Doe",
+    "age": 31,
+    "email": "updated.john@example.com"
+  },
+  "pagination_params": {
+    "default": {
+      "limit": 30,
+      "skip": 0
+    },
+    "custom": {
+      "limit": 10,
+      "skip": 5
+    },
+    "sorting": {
+      "sortBy": "firstName",
+      "order": "asc"
+    }
+  },
+  "search_terms": {
+    "valid_term": "John",
+    "partial_match": "Em",
+    "no_results": "XYZ123NonExistent"
+  },
+  "valid_user_ids": [1, 2, 3, 4, 5, 10, 15, 20],
+  "expected_response_fields": [
+    "id", "firstName", "lastName", "maidenName", "age", "gender",
+    "email", "phone", "username", "birthDate", "image", "bloodGroup",
+    "height", "weight", "eyeColor", "hair", "address", "macAddress",
+    "university", "bank", "company", "ein", "ssn", "userAgent", 
+    "crypto", "role"
+  ]
+}

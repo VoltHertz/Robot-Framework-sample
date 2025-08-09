@@ -112,6 +112,45 @@ python -m robot --outputdir results/api/auth_api/$(date +%Y%m%d_%H%M%S) tests/ap
 python -m robot --outputdir results/api/auth_api/$(date +%Y%m%d_%H%M%S) --include smoke tests/api/auth/
 ```
 
+### Running Tests - Users API Suite (Implementado)
+
+**Método Recomendado - Scripts de Execução:**
+```bash
+# Modo interativo - seleciona opção do menu
+python run_users_tests.py
+
+# Execução direta
+python run_users_tests.py 1     # Todos os testes de usuários
+python run_users_tests.py 2     # Somente testes de login
+python run_users_tests.py 3     # Somente testes de get all users
+python run_users_tests.py 4     # Somente testes de get by ID
+python run_users_tests.py 5     # Somente testes de search
+python run_users_tests.py 6     # Somente testes de add user
+python run_users_tests.py 7     # Somente testes de update user
+python run_users_tests.py 8     # Somente testes de delete user
+python run_users_tests.py 9     # Somente smoke tests
+python run_users_tests.py 12    # Somente testes simulados (CRUD)
+```
+
+**Scripts Alternativos:**
+```cmd
+# Windows Batch
+run_users_tests.bat 1
+
+# PowerShell  
+.\run_users_tests.ps1 9
+```
+
+**Execução Direta Robot Framework:**
+```bash
+# Todos os testes de usuários
+python -m robot --outputdir results/api/users_api/$(date +%Y%m%d_%H%M%S) tests/api/users/
+
+# Testes específicos por tags
+python -m robot --outputdir results/api/users_api/$(date +%Y%m%d_%H%M%S) --include smoke tests/api/users/
+python -m robot --outputdir results/api/users_api/$(date +%Y%m%d_%H%M%S) --include simulated tests/api/users/
+```
+
 ### Dependencies
 Core dependencies are defined in `requirements.txt` (root):
 - Robot Framework 7.0+
@@ -177,16 +216,17 @@ Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
 
 - Implementar os casos de testes desenvolvidos na pasta Documentation/Use_Cases utilizando os dados da aplicação que estão completamente baixados na pasta data/Full_API_Data/*. Respeitando a infra de pastas, a massa de dados deverá inicialmente ser implementados na pasta data/testdata/* e utilizando jsons. Somente mais tarde iremos implementar um modelo que irá consultar um banco sqlite. A seguir os testes a serem implementados:
     - ✅ **Teste completo do caso de uso Auth_Use_Cases.md incluindo possíveis fluxos alternativos e de erro** (IMPLEMENTADO)
-    - Teste completo do caso de uso Users_Use_Case.md incluindo possíveis fluxos alternativos e de erro.
+    - ✅ **Teste completo do caso de uso Users_Use_Cases.md incluindo possíveis fluxos alternativos e de erro** (IMPLEMENTADO)
     - Teste completo do caso de uso Products_Use_Cases.md incluindo possíveis fluxos alternativos e de erro.
     - Teste completo do caso de uso Carts_Use_Cases.md incluindo possíveis fluxos alternativos e de erro.
 
 ## Foco atual
-- **PRÓXIMA IMPLEMENTAÇÃO**: Implementar os casos de testes completos do arquivo Documentation/Use_Cases/Users_Use_Case.md seguindo o mesmo padrão estabelecido na implementação de Auth:
-  - Dados organizados em data/testdata/users_api/
-  - Service Objects em resources/apis/users_service.resource
-  - Suite executável em tests/api/users/
-  - Scripts de execução com saída dinâmica em results/api/users_api/[timestamp]
+- **PRÓXIMA IMPLEMENTAÇÃO**: Implementar os casos de testes completos do arquivo Documentation/Use_Cases/Products_Use_Cases.md seguindo o mesmo padrão estabelecido na implementação de Auth e Users:
+  - Dados organizados em data/testdata/products_api/
+  - Service Objects em resources/apis/products_service.resource
+  - Suite executável em tests/api/products/
+  - Scripts de execução com saída dinâmica em results/api/products_api/[timestamp]
+- **CORREÇÃO NECESSÁRIA**: Aplicar adequadamente o Library-Keyword/Object Service Pattern nos testes já implementados para garantir total encapsulamento
 - **PADRÃO ESTABELECIDO**: Seguir o modelo de implementação da suite de autenticação para manter consistência
 
 
@@ -248,16 +288,47 @@ Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:
     - ✅ Sistema de resultados dinâmicos funcionando
     - ✅ Todos os design patterns aplicados corretamente
 
-### Cobertura de Testes Implementada
+### Cobertura de Testes Implementada - Authentication API
 - **20+ casos de teste** cobrindo todos os cenários definidos em Auth_Use_Cases.md
 - **Cenários de Sucesso**: Login válido, obtenção de user info, refresh de tokens
 - **Cenários de Erro**: Credenciais inválidas, tokens expirados, campos vazios
 - **Testes de Integração**: Workflows completos end-to-end
 - **Testes de Segurança**: Validação de tokens, replay attacks
 
+### Fase de Implementação - Users API (Em andamento)
+- ✅ **Suite Completa de Users DummyJSON API**:
+  - **Dados de Teste Organizados**: `data/testdata/users_api/`
+    - `valid_users.json` - Dados de usuários válidos estruturados
+    - `invalid_users.json` - Cenários de erro organizados por categoria
+    - `users_endpoints.json` - Configuração centralizada de endpoints
+  
+  - **Service Objects (Library-Keyword Pattern)**: `resources/apis/users_service.resource`
+    - Keywords de operações API (login, CRUD completo, search)
+    - Keywords de validação de resposta
+    - Gerenciamento completo de sessões e utilidades
+    - Tratamento robusto de erros e edge cases
+  
+  - **Suite de Testes Completa**: `tests/api/users/`
+    - `users_login_tests.robot` - UC-USER-001 (8 casos de teste)
+    - `users_get_all_tests.robot` - UC-USER-002 (13 casos de teste)
+    - `users_get_by_id_tests.robot` - UC-USER-003 (15 casos de teste)
+    - `users_search_tests.robot` - UC-USER-004 (18 casos de teste)
+    - `users_add_tests.robot` - UC-USER-005 (16 casos de teste)
+    - `users_update_tests.robot` - UC-USER-006 (18 casos de teste)
+    - `users_delete_tests.robot` - UC-USER-007 (19 casos de teste)
+
+
+### Cobertura de Testes Implementada - Users API
+- **107+ casos de teste** cobrindo todos os cenários definidos em Users_Use_Cases.md
+- **Cenários de Sucesso**: CRUD completo, pesquisa, paginação, ordenação
+- **Cenários de Erro**: IDs inválidos, dados mal formatados, recursos não encontrados
+- **Testes de Edge Cases**: Valores extremos, caracteres especiais, dados duplicados
+- **Testes de Performance**: Tempo de resposta, operações em lote
+- **Validação Completa**: Estrutura de resposta, tipos de dados, integridade
+
 ## Template/Padrão Estabelecido para Próximas Implementações
 
-Com base na implementação completa da suite de autenticação, foi estabelecido o seguinte template que deve ser seguido para as demais APIs (Users, Products, Carts):
+Com base na implementação completa das suites de Authentication e Users, foi estabelecido e consolidado o seguinte template que deve ser seguido para as demais APIs (Products, Carts):
 
 ### Estrutura de Pastas Padrão:
 ```

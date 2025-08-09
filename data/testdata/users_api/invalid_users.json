@@ -1,0 +1,139 @@
+{
+  "invalid_credentials": {
+    "wrong_username": {
+      "username": "wronguser",
+      "password": "emilyspass",
+      "expected_status": 400,
+      "expected_message": "Invalid credentials"
+    },
+    "wrong_password": {
+      "username": "emilys", 
+      "password": "wrongpassword",
+      "expected_status": 400,
+      "expected_message": "Invalid credentials"
+    },
+    "empty_username": {
+      "username": "",
+      "password": "emilyspass",
+      "expected_status": 400,
+      "expected_message": "Invalid credentials"
+    },
+    "empty_password": {
+      "username": "emilys",
+      "password": "",
+      "expected_status": 400,
+      "expected_message": "Invalid credentials"
+    },
+    "missing_username": {
+      "password": "emilyspass",
+      "expected_status": 400,
+      "expected_message": "Invalid credentials"
+    },
+    "missing_password": {
+      "username": "emilys",
+      "expected_status": 400,
+      "expected_message": "Invalid credentials"
+    },
+    "null_values": {
+      "username": null,
+      "password": null,
+      "expected_status": 400,
+      "expected_message": "Invalid credentials"
+    }
+  },
+  "invalid_user_ids": {
+    "non_existent_id": {
+      "id": 99999,
+      "expected_status": 404,
+      "expected_message": "User not found"
+    },
+    "negative_id": {
+      "id": -1,
+      "expected_status": 404,
+      "expected_message": "User not found"
+    },
+    "zero_id": {
+      "id": 0,
+      "expected_status": 404,
+      "expected_message": "User not found"
+    },
+    "text_id": {
+      "id": "abc",
+      "expected_status": 404,
+      "expected_message": "User not found"
+    },
+    "special_chars_id": {
+      "id": "@#$",
+      "expected_status": 404,
+      "expected_message": "User not found"
+    }
+  },
+  "invalid_pagination": {
+    "negative_limit": {
+      "limit": -10,
+      "skip": 0
+    },
+    "negative_skip": {
+      "limit": 10,
+      "skip": -5
+    },
+    "excessive_limit": {
+      "limit": 1000,
+      "skip": 0
+    },
+    "text_limit": {
+      "limit": "abc",
+      "skip": 0
+    },
+    "text_skip": {
+      "limit": 10,
+      "skip": "xyz"
+    }
+  },
+  "invalid_sorting": {
+    "invalid_sortby": {
+      "sortBy": "invalidField",
+      "order": "asc"
+    },
+    "invalid_order": {
+      "sortBy": "firstName",
+      "order": "invalid"
+    }
+  },
+  "invalid_search": {
+    "empty_query": {
+      "q": "",
+      "description": "Empty search query"
+    },
+    "special_chars": {
+      "q": "!@#$%^&*()",
+      "description": "Special characters search"
+    }
+  },
+  "invalid_user_data": {
+    "empty_fields": {
+      "firstName": "",
+      "lastName": "",
+      "age": "",
+      "email": ""
+    },
+    "invalid_email": {
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "invalid-email",
+      "age": 25
+    },
+    "negative_age": {
+      "firstName": "Test",
+      "lastName": "User",
+      "email": "test@example.com",
+      "age": -5
+    },
+    "excessive_age": {
+      "firstName": "Test",
+      "lastName": "User", 
+      "email": "test@example.com",
+      "age": 200
+    }
+  }
+}
