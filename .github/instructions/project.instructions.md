@@ -94,20 +94,6 @@ Exemple Core dependencies are defined in `Documentation/Examples/Kickoff/Modelo 
 (em construção)
 - Follow the established project structure pattern for consistency)
 
-# Instruções gerais de codificação do projeto Design Patterns Robot
-
-- O projeto utiliza Robot Framework para automação de testes em centenas de cenários, APIs e Interfaces em diferentes plataformas e ambientes.
-- O contexto do projeto envolve CI/CD e testes funcionais (robot), portanto, o código deve ser robusto e eficiente.
-- O ambiente possuirá conexão com o banco de dados para validação e geração de massa de dados atemporal.
-- O principio DRY (Don't Repeat Yourself) deve ser aplicado para evitar duplicação de código em todo o projeto.
-- O foco principal é a aplicação de Padrões de Projeto (Design Patterns) em testes automatizados:
-    - Library-keyword Patterns / Object Service, para abstrair a lógica de negócios e facilitar a reutilização de código em APIs.
-    - Factory Pattern, para gerenciar a criação de massa de dados.
-    - Strategy Pattern, para definir diferentes estratégias de teste.
-    - Page Object Model, para organizar o código relacionado a navegação em páginas HTML.
-    - Facade Pattern, para simplificar um grupo de interfaces.
-- Manter uma estrutura clara, separando Casos de Teste, Palavras-chave (Keywords), Recursos e Variáveis.
-- As palavras-chave devem ser reutilizáveis e modulares.
 
 ## Backlog de atividades
 Aqui são descritas as condições atuais do projeto e objetivos de longo prazo:

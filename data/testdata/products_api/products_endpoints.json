@@ -1,0 +1,18 @@
+{
+  "base_url": "https://dummyjson.com",
+  "endpoints": {
+    "get_all_products": "/products",
+    "get_product_by_id": "/products/{id}",
+    "search_products": "/products/search",
+    "get_categories": "/products/categories",
+    "get_products_by_category": "/products/category/{categoryName}",
+    "add_product": "/products/add",
+    "update_product": "/products/{id}",
+    "delete_product": "/products/{id}"
+  },
+  "headers": {
+    "content_type": "application/json",
+    "accept": "application/json"
+  },
+  "timeout": 30
+}

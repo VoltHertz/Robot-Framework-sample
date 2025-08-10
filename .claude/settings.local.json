@@ -15,7 +15,8 @@
       "Bash(pip install:*)",
       "Bash(robot:*)",
       "Bash(python:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(touch:*)"
     ],
     "deny": []
   }

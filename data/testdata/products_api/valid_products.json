@@ -1,0 +1,147 @@
+{
+  "test_products": {
+    "existing_product_1": {
+      "id": 1,
+      "title": "iPhone 9",
+      "description": "An apple mobile which is nothing like apple",
+      "price": 549,
+      "discountPercentage": 12.96,
+      "rating": 4.69,
+      "stock": 94,
+      "brand": "Apple",
+      "category": "smartphones"
+    },
+    "existing_product_5": {
+      "id": 5,
+      "title": "Huawei P30",
+      "description": "Huawei's re-badged P30 Pro New Edition was officially unveiled yesterday in Germany and now the device has made its way to the UK.",
+      "price": 499,
+      "discountPercentage": 10.58,
+      "rating": 4.09,
+      "stock": 32,
+      "brand": "Huawei",
+      "category": "smartphones"
+    },
+    "existing_product_10": {
+      "id": 10,
+      "title": "HP Pavilion 15-DK1056WM",
+      "description": "HP Pavilion 15-DK1056WM Gaming Laptop 10th Gen Core i5, 8GB, 256GB SSD, GTX 1650 4GB, Windows 10",
+      "price": 1099,
+      "discountPercentage": 6.18,
+      "rating": 4.43,
+      "stock": 89,
+      "brand": "HP",
+      "category": "laptops"
+    },
+    "existing_product_15": {
+      "id": 15,
+      "title": "Eau De Perfume Spray",
+      "description": "Genuine  Al-Rehab concentrated perfume oil by Alrehab Crown Perfumes",
+      "price": 30,
+      "discountPercentage": 10.99,
+      "rating": 4,
+      "stock": 105,
+      "brand": "Al Munakh",
+      "category": "fragrances"
+    },
+    "existing_product_30": {
+      "id": 30,
+      "title": "Key Holder",
+      "description": "Attractive DesignMetallic materialFour key hooksReliable & DurablePremium Quality",
+      "price": 30,
+      "discountPercentage": 2.92,
+      "rating": 4.92,
+      "stock": 54,
+      "brand": "Golden",
+      "category": "home-decoration"
+    }
+  },
+  "new_product_data": {
+    "title": "New Test Product",
+    "description": "This is a test product for automation testing",
+    "price": 199.99,
+    "discountPercentage": 15.5,
+    "rating": 4.5,
+    "stock": 50,
+    "brand": "TestBrand",
+    "category": "electronics",
+    "thumbnail": "https://test.example.com/image.jpg"
+  },
+  "update_product_data": {
+    "title": "Updated Test Product",
+    "description": "This product has been updated via automation",
+    "price": 249.99,
+    "discountPercentage": 20.0,
+    "rating": 4.8,
+    "stock": 75,
+    "brand": "UpdatedBrand"
+  },
+  "valid_categories": [
+    "smartphones",
+    "laptops", 
+    "fragrances",
+    "skincare",
+    "groceries",
+    "home-decoration",
+    "furniture",
+    "tops",
+    "womens-dresses",
+    "womens-shoes",
+    "mens-shirts",
+    "mens-shoes",
+    "mens-watches",
+    "womens-watches",
+    "womens-bags",
+    "womens-jewellery",
+    "sunglasses",
+    "automotive",
+    "motorcycle",
+    "lighting"
+  ],
+  "search_terms": {
+    "valid_term": "phone",
+    "partial_match": "iPhone",
+    "category_term": "laptop",
+    "brand_term": "Apple",
+    "no_results": "xyzinvalidproduct123",
+    "single_char": "a",
+    "multiple_words": "iPhone Apple",
+    "case_insensitive": "PHONE"
+  },
+  "pagination_params": {
+    "default": {
+      "limit": 30,
+      "skip": 0
+    },
+    "custom": {
+      "limit": 10,
+      "skip": 20
+    },
+    "large_limit": {
+      "limit": 100,
+      "skip": 0
+    },
+    "high_skip": {
+      "limit": 30,
+      "skip": 50
+    },
+    "sorting": {
+      "sortBy": "title",
+      "order": "asc"
+    }
+  },
+  "valid_product_ids": [1, 2, 3, 4, 5, 10, 15, 20, 25, 30],
+  "expected_response_fields": [
+    "id",
+    "title", 
+    "description",
+    "price",
+    "discountPercentage",
+    "rating",
+    "stock",
+    "brand",
+    "category",
+    "thumbnail",
+    "images"
+  ]
+}

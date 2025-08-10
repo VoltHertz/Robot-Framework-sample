@@ -1,0 +1,157 @@
+{
+  "invalid_product_ids": {
+    "non_existent_id": {
+      "id": 999999,
+      "expected_status": 404,
+      "expected_message": "Product with id '999999' not found"
+    },
+    "negative_id": {
+      "id": -1,
+      "expected_status": 400,
+      "expected_message": "Invalid product id"
+    },
+    "zero_id": {
+      "id": 0,
+      "expected_status": 400,
+      "expected_message": "Invalid product id"
+    },
+    "text_id": {
+      "id": "abc",
+      "expected_status": 400,
+      "expected_message": "Invalid product id"
+    },
+    "special_chars_id": {
+      "id": "@#$",
+      "expected_status": 400,
+      "expected_message": "Invalid product id"
+    }
+  },
+  "invalid_categories": {
+    "non_existent_category": {
+      "category": "nonexistentcategory123",
+      "expected_status": 200,
+      "expected_message": "No products found in category"
+    },
+    "invalid_special_chars": {
+      "category": "@#$%",
+      "expected_status": 200,
+      "expected_message": "No products found in category"
+    },
+    "numeric_category": {
+      "category": "12345",
+      "expected_status": 200,
+      "expected_message": "No products found in category"
+    }
+  },
+  "invalid_product_data": {
+    "missing_title": {
+      "description": "Product without title",
+      "price": 100,
+      "expected_status": 400,
+      "expected_message": "Title is required"
+    },
+    "missing_price": {
+      "title": "Product without price",
+      "description": "This product has no price",
+      "expected_status": 400,
+      "expected_message": "Price is required"
+    },
+    "negative_price": {
+      "title": "Negative price product",
+      "price": -50,
+      "description": "Product with negative price",
+      "expected_status": 400,
+      "expected_message": "Price must be positive"
+    },
+    "zero_price": {
+      "title": "Zero price product",
+      "price": 0,
+      "description": "Product with zero price",
+      "expected_status": 400,
+      "expected_message": "Price must be greater than zero"
+    },
+    "invalid_discount": {
+      "title": "Invalid discount product",
+      "price": 100,
+      "discountPercentage": 150,
+      "description": "Product with invalid discount",
+      "expected_status": 400,
+      "expected_message": "Discount percentage must be between 0-100"
+    },
+    "negative_stock": {
+      "title": "Negative stock product",
+      "price": 100,
+      "stock": -10,
+      "description": "Product with negative stock",
+      "expected_status": 400,
+      "expected_message": "Stock cannot be negative"
+    },
+    "invalid_rating": {
+      "title": "Invalid rating product",
+      "price": 100,
+      "rating": 6,
+      "description": "Product with invalid rating",
+      "expected_status": 400,
+      "expected_message": "Rating must be between 0-5"
+    },
+    "empty_title": {
+      "title": "",
+      "price": 100,
+      "description": "Product with empty title",
+      "expected_status": 400,
+      "expected_message": "Title cannot be empty"
+    },
+    "null_values": {
+      "title": null,
+      "price": null,
+      "description": null,
+      "expected_status": 400,
+      "expected_message": "Required fields cannot be null"
+    },
+    "malformed_json": {
+      "malformed": true,
+      "expected_status": 400,
+      "expected_message": "Invalid JSON format"
+    }
+  },
+  "edge_cases": {
+    "very_long_title": {
+      "title": "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+      "price": 100,
+      "description": "Product with very long title",
+      "test_type": "edge_case"
+    },
+    "special_characters": {
+      "title": "Product with spëcial châractérs & symbols @#$%",
+      "price": 99.99,
+      "description": "Testing special characters handling",
+      "test_type": "edge_case"
+    },
+    "unicode_characters": {
+      "title": "Produit en français 🇫🇷",
+      "price": 150,
+      "description": "Product with unicode and emoji characters 😊",
+      "test_type": "edge_case"
+    },
+    "html_tags": {
+      "title": "<script>alert('test')</script>Product",
+      "price": 200,
+      "description": "<b>HTML</b> tags in description",
+      "test_type": "security"
+    },
+    "sql_injection": {
+      "title": "'; DROP TABLE products; --",
+      "price": 100,
+      "description": "SQL injection attempt in title",
+      "test_type": "security"
+    },
+    "extreme_values": {
+      "title": "Extreme values product",
+      "price": 999999999.99,
+      "discountPercentage": 99.99,
+      "rating": 5.0,
+      "stock": 999999999,
+      "test_type": "boundary"
+    }
+  }
+}
