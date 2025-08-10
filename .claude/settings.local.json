@@ -16,7 +16,12 @@
       "Bash(robot:*)",
       "Bash(python:*)",
       "Bash(ls:*)",
-      "Bash(touch:*)"
+      "Bash(touch:*)",
+      "Bash(mv:*)",
+      "Bash(grep:*)",
+      "Bash(git checkout:*)",
+      "Bash(awk:*)",
+      "Bash(git add:*)"
     ],
     "deny": []
   }

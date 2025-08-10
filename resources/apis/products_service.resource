@@ -19,6 +19,7 @@ ${LAST_REQUEST_DATA}          ${None}
 ${LAST_REQUEST_PARAMS}        ${None}
 ${LAST_REQUEST_ID}            ${None}
 ${LAST_SEARCH_TERM}           ${None}
+${LAST_CATEGORY_NAME}         ${None}
 
 *** Keywords ***
 # ============================================================================
@@ -896,21 +897,21 @@ Get Product Test Data
     ...                File: resources/apis/products_service.resource:1478
     [Arguments]    ${product_key}
     ${product_data}=    Get From Dictionary    ${test_products}    ${product_key}
-    [Return]    ${product_data}
+    RETURN    ${product_data}
 
 Get Valid Product ID For Testing
     [Documentation]    Get a valid product ID for testing purposes
     ...                File: resources/apis/products_service.resource:1484
     [Arguments]    ${index}=0
     ${product_id}=    Get From List    ${valid_product_ids}    ${index}
-    [Return]    ${product_id}
+    RETURN    ${product_id}
 
 Get Invalid Product Test Data
     [Documentation]    Get invalid product test data by scenario
     ...                File: resources/apis/products_service.resource:1490
     [Arguments]    ${scenario_key}
     ${invalid_data}=    Get From Dictionary    ${invalid_product_ids}    ${scenario_key}
-    [Return]    ${invalid_data}
+    RETURN    ${invalid_data}
 
 Log Current Response Details
     [Documentation]    Log current response details for debugging

@@ -466,7 +466,7 @@ Validate Search Results Relevance
     [Tags]    business-logic    search-users    validation    relevance
     _Execute Search Users Request    Emily
     _Validate Users List Response
-    _Validate Search Results Relevance    Emily
+    _Validate Search Results Relevance Internal    Emily
 
 Search Users With Pagination Parameters
     [Documentation]    Search users with pagination parameters - UC-USER-004-A8
@@ -484,7 +484,7 @@ Validate Search Performance
     _Execute Search Users Request    Emily
     ${end_time}=    Get Time    epoch
     _Validate Users List Response
-    _Validate Search Performance    ${start_time}    ${end_time}
+    _Validate Search Performance Internal    ${start_time}    ${end_time}
 
 # UC-USER-005: Add New User Business Logic (Simulated)
 Add New User With Valid Data
@@ -612,7 +612,7 @@ Validate Add User Performance
     _Execute Add User Request    ${new_user_data}
     ${end_time}=    Get Time    epoch
     _Validate User Creation Response    ${new_user_data}
-    _Validate Add User Performance    ${start_time}    ${end_time}
+    _Validate Add User Performance Internal    ${start_time}    ${end_time}
 
 # UC-USER-006: Update User Business Logic (Simulated)
 Update User With Valid Data
@@ -774,7 +774,7 @@ Update User With Long Names
     ...                File: resources/apis/users_service.resource:699
     [Tags]    business-logic    update-user    edge-case    long-names
     [Arguments]    ${user_id}=1
-    ${long_names}=    Create Dictionary    firstName=${'A' * 50}    lastName=${'B' * 50}
+    ${long_names}=    Create Dictionary    firstName=${{"A" * 50}}    lastName=${{"B" * 50}}
     _Execute Update User Request    ${user_id}    ${long_names}
     _Validate User Update Response    ${user_id}    ${long_names}
     _Validate Long Names Update Response    ${long_names}
@@ -796,7 +796,7 @@ Validate Update User Performance
     _Execute Update User Request    ${user_id}    ${update_user_data}
     ${end_time}=    Get Time    epoch
     _Validate User Update Response    ${user_id}    ${update_user_data}
-    _Validate Update User Performance    ${start_time}    ${end_time}
+    _Validate Update User Performance Internal    ${start_time}    ${end_time}
 
 # UC-USER-007: Delete User Business Logic (Simulated)
 Delete User With Valid ID
@@ -922,7 +922,7 @@ Validate Delete User Performance
     _Execute Delete User Request    ${user_id}
     ${end_time}=    Get Time    epoch
     _Validate User Deletion Response    ${user_id}
-    _Validate Delete User Performance    ${start_time}    ${end_time}
+    _Validate Delete User Performance Internal    ${start_time}    ${end_time}
 
 # ============================================================================
 # TECHNICAL KEYWORDS (Low-Level API Operations - Private/Internal)
@@ -1185,6 +1185,78 @@ _Validate Error Response
     ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
     Dictionary Should Contain Key    ${response_json}    message
     Should Be Equal As Strings    ${response_json['message']}    ${expected_message}
+
+# ============================================================================
+# ADDITIONAL VALIDATION KEYWORDS (Missing from previous implementation)
+# ============================================================================
+
+_Validate Search Results Relevance Internal
+    [Documentation]    Validate search results relevance for query - internal technical implementation
+    ...                File: resources/apis/users_service.resource:469
+    [Arguments]    ${search_term}
+    Log    Search results relevance validation for term: ${search_term} - users_service.resource:469
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be True    ${response_json['total']} > 0
+    # Validate that results contain the search term in relevant fields
+    ${users_list}=    Set Variable    ${response_json['users']}
+    FOR    ${user}    IN    @{users_list}
+        ${term_lower}=    Convert To Lower Case    ${search_term}
+        ${first_name_lower}=    Convert To Lower Case    ${user['firstName']}
+        ${last_name_lower}=    Convert To Lower Case    ${user['lastName']}
+        ${found_in_first}=    Run Keyword And Return Status    Should Contain    ${first_name_lower}    ${term_lower}
+        ${found_in_last}=    Run Keyword And Return Status    Should Contain    ${last_name_lower}    ${term_lower}
+        ${found}=    Evaluate    ${found_in_first} or ${found_in_last}
+        Should Be True    ${found}    Search term '${search_term}' not found in user '${user['firstName']} ${user['lastName']}'
+    END
+
+_Execute Search Users Request With Pagination
+    [Documentation]    Execute search users request with pagination parameters
+    ...                File: resources/apis/users_service.resource:475
+    [Arguments]    ${query}    ${limit}=${None}    ${skip}=${None}
+    Log    Execute search users request with pagination - users_service.resource:475
+    ${params}=    Create Dictionary    q=${query}
+    Run Keyword If    '${limit}' != '${None}'    Set To Dictionary    ${params}    limit=${limit}
+    Run Keyword If    '${skip}' != '${None}'    Set To Dictionary    ${params}    skip=${skip}
+    ${response}=    GET On Session    ${USERS_SESSION}    ${endpoints['search_users']}    params=${params}    expected_status=any
+    Set Test Variable    ${LAST_RESPONSE}    ${response}
+    Set Test Variable    ${LAST_REQUEST_PARAMS}    ${params}
+    Set Test Variable    ${LAST_SEARCH_TERM}    ${query}
+
+_Validate Search Performance Internal
+    [Documentation]    Validate search performance benchmarks - internal technical implementation
+    ...                File: resources/apis/users_service.resource:487
+    [Arguments]    ${start_time}    ${end_time}
+    Log    Search performance validation - users_service.resource:487
+    ${duration}=    Evaluate    ${end_time} - ${start_time}
+    Should Be True    ${duration} < 5.0    Search took too long: ${duration} seconds
+    Log    Search completed in ${duration} seconds
+
+_Validate Add User Performance Internal
+    [Documentation]    Validate add user performance benchmarks - internal technical implementation
+    ...                File: resources/apis/users_service.resource:615
+    [Arguments]    ${start_time}    ${end_time}
+    Log    Add user performance validation - users_service.resource:615
+    ${duration}=    Evaluate    ${end_time} - ${start_time}
+    Should Be True    ${duration} < 3.0    Add user took too long: ${duration} seconds
+    Log    Add user completed in ${duration} seconds
+
+_Validate Update User Performance Internal
+    [Documentation]    Validate update user performance benchmarks - internal technical implementation
+    ...                File: resources/apis/users_service.resource:799
+    [Arguments]    ${start_time}    ${end_time}
+    Log    Update user performance validation - users_service.resource:799
+    ${duration}=    Evaluate    ${end_time} - ${start_time}
+    Should Be True    ${duration} < 3.0    Update user took too long: ${duration} seconds
+    Log    Update user completed in ${duration} seconds
+
+_Validate Delete User Performance Internal
+    [Documentation]    Validate delete user performance benchmarks - internal technical implementation
+    ...                File: resources/apis/users_service.resource:925
+    [Arguments]    ${start_time}    ${end_time}
+    Log    Delete user performance validation - users_service.resource:925
+    ${duration}=    Evaluate    ${end_time} - ${start_time}
+    Should Be True    ${duration} < 3.0    Delete user took too long: ${duration} seconds
+    Log    Delete user completed in ${duration} seconds
 
 # ============================================================================
 # UTILITY KEYWORDS
