@@ -53,7 +53,7 @@ Get Users With Zero Limit Should Use Default
     _Validate Users List Response
     ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
     Should Be True    ${response_json['limit']} > 0
-    Length Should Be Greater Than    ${response_json['users']}    0
+    Should Be True    len(${response_json['users']}) > 0
 
 # UC-USER-002: Sorting Tests
 Get Users Sorted By LastName Ascending Should Succeed

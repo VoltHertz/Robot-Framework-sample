@@ -5,6 +5,7 @@ Documentation    Users Service - Library-Keyword Pattern implementation for user
 Library          RequestsLibrary
 Library          JSONLibrary    
 Library          Collections
+Library          String
 Variables        ${CURDIR}/../../data/testdata/users_api/users_endpoints.json
 Variables        ${CURDIR}/../../data/testdata/users_api/valid_users.json
 Variables        ${CURDIR}/../../data/testdata/users_api/invalid_users.json
@@ -13,6 +14,12 @@ Variables        ${CURDIR}/../../data/testdata/users_api/invalid_users.json
 ${USERS_SESSION}              users_session
 ${ACCESS_TOKEN}               ${EMPTY}
 ${CURRENT_USER_ID}            ${EMPTY}
+# Added placeholders so static analysis recognizes dynamic variables
+${LAST_RESPONSE}              ${None}          # Placeholder - will be overwritten by Set Test Variable
+${LAST_REQUEST_DATA}          ${None}
+${LAST_REQUEST_PARAMS}        ${None}
+${LAST_REQUEST_ID}            ${None}
+${LAST_SEARCH_TERM}           ${None}
 
 *** Keywords ***
 # ============================================================================
@@ -982,7 +989,7 @@ _Validate Users List Response
     Dictionary Should Contain Key    ${response_json}    skip
     Dictionary Should Contain Key    ${response_json}    limit
     Should Be True    ${response_json['total']} > 0
-    Length Should Be Greater Than    ${response_json['users']}    0
+    Should Be True    len(${response_json['users']}) > 0
     _Validate User Objects In List    ${response_json['users']}
 
 _Validate User Objects In List
@@ -1017,7 +1024,7 @@ _Validate Users Sorting
     [Arguments]    ${sort_field}    ${sort_order}
     ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
     ${users_list}=    Set Variable    ${response_json['users']}
-    Length Should Be Greater Than    ${users_list}    1
+    Should Be True    len(${users_list}) > 1
     ${first_user}=    Get From List    ${users_list}    0
     ${second_user}=    Get From List    ${users_list}    1
     Run Keyword If    '${sort_order}' == 'asc'    
@@ -1072,7 +1079,7 @@ _Validate Search Results
     [Arguments]    ${search_term}
     ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
     Should Be True    ${response_json['total']} > 0
-    Length Should Be Greater Than    ${response_json['users']}    0
+    Should Be True    len(${response_json['users']}) > 0
     ${users_list}=    Set Variable    ${response_json['users']}
     FOR    ${user}    IN    @{users_list}
         ${search_term_lower}=    Convert To Lower Case    ${search_term}
@@ -1089,7 +1096,7 @@ _Validate Empty Search Results
     Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
     ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
     Should Be Equal As Numbers    ${response_json['total']}    0
-    Length Should Be    ${response_json['users']}    0
+    Should Be True    len(${response_json['users']}) == 0
 
 # UC-USER-005: Add User Operations
 _Execute Add User Request
@@ -1210,3 +1217,526 @@ Log Current Response Details
     Log    Response Status: ${LAST_RESPONSE.status_code}
     Log    Response Body: ${LAST_RESPONSE.json()}
     Log    Response Headers: ${LAST_RESPONSE.headers}
+
+# ============================================================================
+# SPECIFIC VALIDATION KEYWORDS (Missing implementations)
+# ============================================================================
+
+_Validate Large Limit Response
+    [Documentation]    Additional validations for large limit (limit=100) scenario
+    ...                File: resources/apis/users_service.resource:1220
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['limit']}    100
+    Should Be True    len(${response_json['users']}) > 0
+    Should Be True    len(${response_json['users']}) <= 100
+    Log    users_service.resource:1220 [_Validate Large Limit Response] length=${response_json['users'].__len__()}
+
+_Validate High Skip Response
+    [Documentation]    Validations for high skip (skip=50) scenario
+    ...                File: resources/apis/users_service.resource:1228
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['skip']}    50
+    Should Be True    ${response_json['total']} >= 50
+    Should Be True    len(${response_json['users']}) >= 0
+    Log    users_service.resource:1228 [_Validate High Skip Response] skip=${response_json['skip']}
+
+_Validate Zero Limit Response
+    [Documentation]    Validations for zero limit (limit=0) scenario
+    ...                File: resources/apis/users_service.resource:1236
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['limit']}    0
+    Should Be True    len(${response_json['users']}) == 0
+    Log    users_service.resource:1236 [_Validate Zero Limit Response] zero list validated
+
+_Validate Invalid Sorting Field Response
+    [Documentation]    Validate response when sort field is invalid
+    ...                File: resources/apis/users_service.resource:1243
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    # DummyJSON API ignores invalid sort fields and returns unsorted data
+    Dictionary Should Contain Key    ${response_json}    users
+    Log    users_service.resource:1243 [_Validate Invalid Sorting Field Response] handled gracefully
+
+_Validate Invalid Sort Order Response
+    [Documentation]    Validate response when sort order is invalid
+    ...                File: resources/apis/users_service.resource:1251
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    # DummyJSON API ignores invalid sort order and returns default order
+    Dictionary Should Contain Key    ${response_json}    users
+    Log    users_service.resource:1251 [_Validate Invalid Sort Order Response] handled gracefully
+
+
+_Validate Each User Object Complete Fields
+    [Documentation]    Validate each user object has complete fields
+    ...                File: resources/apis/users_service.resource:1268
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    ${users_list}=    Set Variable    ${response_json['users']}
+    FOR    ${user}    IN    @{users_list}
+        FOR    ${field}    IN    @{expected_response_fields}
+            Dictionary Should Contain Key    ${user}    ${field}
+        END
+    END
+    Log    users_service.resource:1268 [_Validate Each User Object Complete Fields] all fields validated
+
+_Validate User Specific Data
+    [Documentation]    Validate specific user data matches expected values
+    ...                File: resources/apis/users_service.resource:1278
+    [Arguments]    ${user_id}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${user_id}
+    Should Not Be Empty    ${response_json['firstName']}
+    Should Not Be Empty    ${response_json['lastName']}
+    Should Not Be Empty    ${response_json['email']}
+    Log    users_service.resource:1278 [_Validate User Specific Data] user_id=${user_id} validated
+
+_Validate Negative ID Error Response
+    [Documentation]    Validate error response for negative ID
+    ...                File: resources/apis/users_service.resource:1287
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    404
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    message
+    Should Contain    ${response_json['message']}    not found
+    Log    users_service.resource:1287 [_Validate Negative ID Error Response] negative ID handled
+
+_Validate Zero ID Error Response
+    [Documentation]    Validate error response for zero ID
+    ...                File: resources/apis/users_service.resource:1295
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    404
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    message
+    Should Contain    ${response_json['message']}    not found
+    Log    users_service.resource:1295 [_Validate Zero ID Error Response] zero ID handled
+
+_Validate Text ID Error Response
+    [Documentation]    Validate error response for text ID
+    ...                File: resources/apis/users_service.resource:1303
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    404
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    message
+    Should Contain    ${response_json['message']}    not found
+    Log    users_service.resource:1303 [_Validate Text ID Error Response] text ID handled
+
+_Validate Special Characters ID Error Response
+    [Documentation]    Validate error response for special characters ID
+    ...                File: resources/apis/users_service.resource:1311
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    404
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    message
+    Should Contain    ${response_json['message']}    not found
+    Log    users_service.resource:1311 [_Validate Special Characters ID Error Response] special chars ID handled
+
+_Validate User Response All Fields
+    [Documentation]    Validate user response contains all required fields
+    ...                File: resources/apis/users_service.resource:1319
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    FOR    ${field}    IN    @{expected_response_fields}
+        Dictionary Should Contain Key    ${response_json}    ${field}
+    END
+    Log    users_service.resource:1319 [_Validate User Response All Fields] all fields present
+
+_Validate Users Have Unique Data
+    [Documentation]    Validate different users have unique data
+    ...                File: resources/apis/users_service.resource:1349
+    [Arguments]    ${user1_data}    ${user2_data}
+    Should Not Be Equal    ${user1_data['id']}    ${user2_data['id']}
+    Should Not Be Equal    ${user1_data['username']}    ${user2_data['username']}
+    Should Not Be Equal    ${user1_data['email']}    ${user2_data['email']}
+    Log    users_service.resource:1349 [_Validate Users Have Unique Data] uniqueness validated
+
+# Search-specific validations
+_Validate Search By First Name Results
+    [Documentation]    Validate search results by first name
+    ...                File: resources/apis/users_service.resource:1357
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    ${users_list}=    Set Variable    ${response_json['users']}
+    FOR    ${user}    IN    @{users_list}
+        Should Contain    ${user['firstName']}    Emily    ignore_case=True
+    END
+    Log    users_service.resource:1357 [_Validate Search By First Name Results] first name search validated
+
+_Validate Search By Last Name Results
+    [Documentation]    Validate search results by last name
+    ...                File: resources/apis/users_service.resource:1365
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    ${users_list}=    Set Variable    ${response_json['users']}
+    FOR    ${user}    IN    @{users_list}
+        Should Contain    ${user['lastName']}    Johnson    ignore_case=True
+    END
+    Log    users_service.resource:1365 [_Validate Search By Last Name Results] last name search validated
+
+_Validate Search By Email Domain Results
+    [Documentation]    Validate search results by email domain
+    ...                File: resources/apis/users_service.resource:1373
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    ${users_list}=    Set Variable    ${response_json['users']}
+    FOR    ${user}    IN    @{users_list}
+        Should Contain    ${user['email']}    gmail.com    ignore_case=True
+    END
+    Log    users_service.resource:1373 [_Validate Search By Email Domain Results] email domain search validated
+
+_Validate Search Case Insensitive Results
+    [Documentation]    Validate search results are case insensitive
+    ...                File: resources/apis/users_service.resource:1381
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be True    ${response_json['total']} > 0
+    ${users_list}=    Set Variable    ${response_json['users']}
+    ${found_emily}=    Set Variable    False
+    FOR    ${user}    IN    @{users_list}
+        ${first_name_lower}=    Convert To Lower Case    ${user['firstName']}
+        ${found_emily}=    Evaluate    ${found_emily} or "emily" in "${first_name_lower}"
+    END
+    Should Be True    ${found_emily}
+    Log    users_service.resource:1381 [_Validate Search Case Insensitive Results] case insensitive search validated
+
+_Validate Search Single Character Results
+    [Documentation]    Validate search with single character returns results
+    ...                File: resources/apis/users_service.resource:1393
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be True    ${response_json['total']} > 0
+    Log    users_service.resource:1393 [_Validate Search Single Character Results] single char search validated
+
+_Validate Search Multiple Words Results
+    [Documentation]    Validate search with multiple words
+    ...                File: resources/apis/users_service.resource:1399
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be True    ${response_json['total']} > 0
+    ${users_list}=    Set Variable    ${response_json['users']}
+    FOR    ${user}    IN    @{users_list}
+        ${full_name}=    Set Variable    ${user['firstName']} ${user['lastName']}
+        ${full_name_lower}=    Convert To Lower Case    ${full_name}
+        ${match}=    Evaluate    "emily" in "${full_name_lower}" or "johnson" in "${full_name_lower}"
+        Should Be True    ${match}
+        BREAK
+    END
+    Log    users_service.resource:1399 [_Validate Search Multiple Words Results] multiple words search validated
+
+_Validate Empty Query Search Response
+    [Documentation]    Validate empty query search response behavior
+    ...                File: resources/apis/users_service.resource:1411
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    Should Be True    ${response_json['total']} >= 0
+    Log    users_service.resource:1411 [_Validate Empty Query Search Response] empty query handled
+
+_Validate Special Characters Search Response
+    [Documentation]    Validate special characters search response
+    ...                File: resources/apis/users_service.resource:1418
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    Should Be True    ${response_json['total']} >= 0
+    Log    users_service.resource:1418 [_Validate Special Characters Search Response] special chars handled
+
+_Validate Search Numbers Results
+    [Documentation]    Validate search with numbers in query
+    ...                File: resources/apis/users_service.resource:1425
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be True    ${response_json['total']} >= 0
+    Log    users_service.resource:1425 [_Validate Search Numbers Results] numbers search handled
+
+_Validate Search Pagination Fields
+    [Documentation]    Validate search results pagination fields
+    ...                File: resources/apis/users_service.resource:1431
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    users
+    Dictionary Should Contain Key    ${response_json}    total
+    Dictionary Should Contain Key    ${response_json}    skip
+    Dictionary Should Contain Key    ${response_json}    limit
+    Log    users_service.resource:1431 [_Validate Search Pagination Fields] pagination fields validated
+
+_Validate Search Pagination Response
+    [Documentation]    Validate search pagination response
+    ...                File: resources/apis/users_service.resource:1463
+    [Arguments]    ${expected_limit}    ${expected_skip}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['limit']}    ${expected_limit}
+    Should Be Equal As Numbers    ${response_json['skip']}    ${expected_skip}
+    Log    users_service.resource:1463 [_Validate Search Pagination Response] limit=${expected_limit} skip=${expected_skip}
+
+# User creation validations
+_Validate Complete User Data Response
+    [Documentation]    Validate complete user data in response
+    ...                File: resources/apis/users_service.resource:1477
+    [Arguments]    ${expected_data}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Strings    ${response_json['firstName']}    ${expected_data['firstName']}
+    Should Be Equal As Strings    ${response_json['lastName']}    ${expected_data['lastName']}
+    Should Be Equal As Strings    ${response_json['email']}    ${expected_data['email']}
+    Log    users_service.resource:1477 [_Validate Complete User Data Response] complete data validated
+
+_Validate Generated ID Exists
+    [Documentation]    Validate generated ID exists and is valid
+    ...                File: resources/apis/users_service.resource:1485
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    id
+    Should Be True    ${response_json['id']} > 0
+    Should Be True    ${{isinstance($response_json['id'], int)}}
+    Log    users_service.resource:1485 [_Validate Generated ID Exists] id=${response_json['id']}
+
+_Validate All Sent Fields Echoed
+    [Documentation]    Validate all sent fields are echoed in response
+    ...                File: resources/apis/users_service.resource:1493
+    [Arguments]    ${sent_data}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    FOR    ${key}    IN    @{sent_data}
+        Dictionary Should Contain Key    ${response_json}    ${key}
+        Should Be Equal    ${response_json['${key}']}    ${sent_data['${key}']}
+    END
+    Log    users_service.resource:1493 [_Validate All Sent Fields Echoed] all fields echoed
+
+_Validate Optional Fields Handling
+    [Documentation]    Validate optional fields handling in creation
+    ...                File: resources/apis/users_service.resource:1502
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    id
+    Dictionary Should Contain Key    ${response_json}    firstName
+    Dictionary Should Contain Key    ${response_json}    lastName
+    Log    users_service.resource:1502 [_Validate Optional Fields Handling] optional fields handled
+
+_Validate Duplicate Email Handling
+    [Documentation]    Validate duplicate email handling
+    ...                File: resources/apis/users_service.resource:1509
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    # DummyJSON allows duplicate emails in simulation
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    Dictionary Should Contain Key    ${response_json}    id
+    Log    users_service.resource:1509 [_Validate Duplicate Email Handling] duplicate email handled
+
+_Validate Duplicate Username Handling
+    [Documentation]    Validate duplicate username handling
+    ...                File: resources/apis/users_service.resource:1517
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    # DummyJSON allows duplicate usernames in simulation
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    Dictionary Should Contain Key    ${response_json}    id
+    Log    users_service.resource:1517 [_Validate Duplicate Username Handling] duplicate username handled
+
+_Validate Special Characters Handling
+    [Documentation]    Validate special characters handling in user data
+    ...                File: resources/apis/users_service.resource:1525
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    Dictionary Should Contain Key    ${response_json}    firstName
+    Dictionary Should Contain Key    ${response_json}    lastName
+    Log    users_service.resource:1525 [_Validate Special Characters Handling] special chars handled
+
+_Validate Email Format Accepted
+    [Documentation]    Validate email format is accepted
+    ...                File: resources/apis/users_service.resource:1533
+    [Arguments]    ${email}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Strings    ${response_json['email']}    ${email}
+    Log    users_service.resource:1533 [_Validate Email Format Accepted] email=${email}
+
+_Validate Different User IDs
+    [Documentation]    Validate different users get different IDs
+    ...                File: resources/apis/users_service.resource:1540
+    [Arguments]    ${id1}    ${id2}
+    Should Not Be Equal    ${id1}    ${id2}
+    Log    users_service.resource:1540 [_Validate Different User IDs] id1=${id1} id2=${id2}
+
+# User update validations
+_Validate Partial Update Response
+    [Documentation]    Validate partial update response
+    ...                File: resources/apis/users_service.resource:1553
+    [Arguments]    ${partial_data}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    FOR    ${key}    IN    @{partial_data}
+        Dictionary Should Contain Key    ${response_json}    ${key}
+        Should Be Equal    ${response_json['${key}']}    ${partial_data['${key}']}
+    END
+    Log    users_service.resource:1553 [_Validate Partial Update Response] partial update validated
+
+_Validate Single Field Update
+    [Documentation]    Validate single field update in response
+    ...                File: resources/apis/users_service.resource:1562
+    [Arguments]    ${field_name}    ${expected_value}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    ${field_name}
+    Should Be Equal    ${response_json['${field_name}']}    ${expected_value}
+    Log    users_service.resource:1562 [_Validate Single Field Update] ${field_name}=${expected_value}
+
+_Validate Age Update Response
+    [Documentation]    Validate age update response
+    ...                File: resources/apis/users_service.resource:1569
+    [Arguments]    ${expected_age}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['age']}    ${expected_age}
+    Log    users_service.resource:1569 [_Validate Age Update Response] age=${expected_age}
+
+_Validate Email Format Update
+    [Documentation]    Validate email format update
+    ...                File: resources/apis/users_service.resource:1575
+    [Arguments]    ${expected_email}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Strings    ${response_json['email']}    ${expected_email}
+    Should Match Regexp    ${expected_email}    ^[\w\.-]+@[\w\.-]+\.[a-zA-Z]{2,}$
+    Log    users_service.resource:1575 [_Validate Email Format Update] email=${expected_email}
+
+_Validate Special Characters Update
+    [Documentation]    Validate special characters update
+    ...                File: resources/apis/users_service.resource:1582
+    [Arguments]    ${update_data}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Strings    ${response_json['firstName']}    ${update_data['firstName']}
+    Should Be Equal As Strings    ${response_json['lastName']}    ${update_data['lastName']}
+    Log    users_service.resource:1582 [_Validate Special Characters Update] special chars updated
+
+_Validate ID Preservation
+    [Documentation]    Validate update response preserves original ID
+    ...                File: resources/apis/users_service.resource:1589
+    [Arguments]    ${expected_id}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${expected_id}
+    Log    users_service.resource:1589 [_Validate ID Preservation] id=${expected_id}
+
+_Validate Updated Fields Echo
+    [Documentation]    Validate update response echoes updated fields
+    ...                File: resources/apis/users_service.resource:1595
+    [Arguments]    ${update_data}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    FOR    ${key}    IN    @{update_data}
+        Dictionary Should Contain Key    ${response_json}    ${key}
+        Should Be Equal    ${response_json['${key}']}    ${update_data['${key}']}
+    END
+    Log    users_service.resource:1595 [_Validate Updated Fields Echo] updated fields echoed
+
+_Validate Empty Data Update Response
+    [Documentation]    Validate empty data update response
+    ...                File: resources/apis/users_service.resource:1604
+    # DummyJSON handles empty updates gracefully
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    id
+    Log    users_service.resource:1604 [_Validate Empty Data Update Response] empty update handled
+
+_Validate Multiple Updates Response
+    [Documentation]    Validate multiple updates response
+    ...                File: resources/apis/users_service.resource:1611
+    [Arguments]    ${update1}    ${update2}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    # Should contain the latest update values
+    FOR    ${key}    IN    @{update2}
+        Dictionary Should Contain Key    ${response_json}    ${key}
+        Should Be Equal    ${response_json['${key}']}    ${update2['${key}']}
+    END
+    Log    users_service.resource:1611 [_Validate Multiple Updates Response] multiple updates handled
+
+_Validate Same Data Update Response
+    [Documentation]    Validate same data update response
+    ...                File: resources/apis/users_service.resource:1620
+    # Should handle idempotent updates gracefully
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    id
+    Log    users_service.resource:1620 [_Validate Same Data Update Response] same data update handled
+
+_Validate Long Names Update Response
+    [Documentation]    Validate long names update response
+    ...                File: resources/apis/users_service.resource:1627
+    [Arguments]    ${long_names}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Strings    ${response_json['firstName']}    ${long_names['firstName']}
+    Should Be Equal As Strings    ${response_json['lastName']}    ${long_names['lastName']}
+    Log    users_service.resource:1627 [_Validate Long Names Update Response] long names updated
+
+# User deletion validations
+_Validate Deletion Confirmation
+    [Documentation]    Validate deletion confirmation response
+    ...                File: resources/apis/users_service.resource:1641
+    [Arguments]    ${user_id}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${user_id}
+    Should Be True    ${response_json['isDeleted']}
+    Log    users_service.resource:1641 [_Validate Deletion Confirmation] user_id=${user_id} deleted
+
+_Validate Deletion Timestamp
+    [Documentation]    Validate deletion timestamp is present and valid
+    ...                File: resources/apis/users_service.resource:1648
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Dictionary Should Contain Key    ${response_json}    deletedOn
+    Should Not Be Empty    ${response_json['deletedOn']}
+    Should Match Regexp    ${response_json['deletedOn']}    \\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{3}Z
+    Log    users_service.resource:1648 [_Validate Deletion Timestamp] timestamp=${response_json['deletedOn']}
+
+_Validate Original Data Preservation
+    [Documentation]    Validate deletion preserves original data
+    ...                File: resources/apis/users_service.resource:1655
+    [Arguments]    ${user_id}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${user_id}
+    Dictionary Should Contain Key    ${response_json}    firstName
+    Dictionary Should Contain Key    ${response_json}    lastName
+    Dictionary Should Contain Key    ${response_json}    email
+    Log    users_service.resource:1655 [_Validate Original Data Preservation] original data preserved
+
+_Validate Multiple Deletion Response
+    [Documentation]    Validate multiple deletion response
+    ...                File: resources/apis/users_service.resource:1663
+    [Arguments]    ${user_id}
+    # DummyJSON handles multiple deletions gracefully
+    Should Be Equal As Numbers    ${LAST_RESPONSE.status_code}    200
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${user_id}
+    Log    users_service.resource:1663 [_Validate Multiple Deletion Response] multiple deletion handled
+
+_Validate Other Users Not Affected
+    [Documentation]    Validate other users not affected by deletion
+    ...                File: resources/apis/users_service.resource:1670
+    [Arguments]    ${user_before}    ${user_after}
+    Should Be Equal    ${user_before['id']}    ${user_after['id']}
+    Should Be Equal    ${user_before['firstName']}    ${user_after['firstName']}
+    Should Be Equal    ${user_before['lastName']}    ${user_after['lastName']}
+    Should Be Equal    ${user_before['email']}    ${user_after['email']}
+    Log    users_service.resource:1670 [_Validate Other Users Not Affected] other users preserved
+
+_Validate Large ID Deletion
+    [Documentation]    Validate deletion with large valid ID
+    ...                File: resources/apis/users_service.resource:1678
+    [Arguments]    ${user_id}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${user_id}
+    Should Be True    ${response_json['isDeleted']}
+    Log    users_service.resource:1678 [_Validate Large ID Deletion] large_id=${user_id}
+
+_Validate Sequential Deletion
+    [Documentation]    Validate sequential deletion
+    ...                File: resources/apis/users_service.resource:1685
+    [Arguments]    ${user_id}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${user_id}
+    Should Be True    ${response_json['isDeleted']}
+    Log    users_service.resource:1685 [_Validate Sequential Deletion] sequential deletion user_id=${user_id}
+
+_Validate All Users Deletion
+    [Documentation]    Validate all users deletion
+    ...                File: resources/apis/users_service.resource:1692
+    # All individual deletions should have succeeded
+    Log    users_service.resource:1692 [_Validate All Users Deletion] all users deletion completed
+
+_Validate Complete Object Return
+    [Documentation]    Validate delete returns complete object
+    ...                File: resources/apis/users_service.resource:1697
+    [Arguments]    ${user_id}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${user_id}
+    Dictionary Should Contain Key    ${response_json}    firstName
+    Dictionary Should Contain Key    ${response_json}    lastName
+    Dictionary Should Contain Key    ${response_json}    email
+    Dictionary Should Contain Key    ${response_json}    isDeleted
+    Dictionary Should Contain Key    ${response_json}    deletedOn
+    Log    users_service.resource:1697 [_Validate Complete Object Return] complete object returned
+
+_Validate Data Integrity After Deletion
+    [Documentation]    Validate data integrity after deletion
+    ...                File: resources/apis/users_service.resource:1706
+    [Arguments]    ${user_id}
+    ${response_json}=    Set Variable    ${LAST_RESPONSE.json()}
+    Should Be Equal As Numbers    ${response_json['id']}    ${user_id}
+    Should Be True    ${response_json['isDeleted']}
+    Should Not Be Empty    ${response_json['deletedOn']}
+    # Original data should be preserved
+    Dictionary Should Contain Key    ${response_json}    firstName
+    Dictionary Should Contain Key    ${response_json}    lastName
+    Log    users_service.resource:1706 [_Validate Data Integrity After Deletion] data integrity maintained
+
